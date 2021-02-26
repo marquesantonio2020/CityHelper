@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--String para a Bottom Navigation Bar-->
+    <string name="app_name">CityHelper</string>
+    <string name="issues" translatable="false">Problemas</string>
+    <string name="report_notes">Denuncias e Notas</string>
+
+    <!--Strings para a área de Denuncias e Notas-->
+    <string name="profile">Perfil</string>
+    <string name="reports">Minhas Denuncias</string>
+    <string name="notes">Minhas Notas</string>
+    <string name="button_goto">Ir para</string>
+</resources>

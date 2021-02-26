@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">CityHelper</string>
 
+    <!--Strings for Bottom Navigation Bar-->
+    <string name="issues" translatable="false">Issues</string>
+    <string name="report_notes" translatable="false">Reports and Notes</string>
+    <string name="profile" translatable="false">Profile</string>
+
+    <!--String for Reports and Notes Area-->
+    <string name="reports">My Reports</string>
+    <string name="notes">My Notes</string>
+    <string name="button_goto">Go to</string>
 </resources>
