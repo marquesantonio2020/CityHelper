@@ -2,6 +2,7 @@ package ipvc.estg.cityhelper
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ipvc.estg.cityhelper.fragments.IssueMapFragment
 import ipvc.estg.cityhelper.fragments.ReportsNotesFragment
@@ -13,11 +14,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //get intention if exists - This intention occurs when the user goes from an activity back to bottom nav bar fragments
+        var intent = intent.getStringExtra(INTENT_PARAM)
+
+        Toast.makeText(this, "${intent}", Toast.LENGTH_SHORT).show()
+
         val issueFragment = IssueMapFragment()
         val reportsNotesFragment = ReportsNotesFragment()
         val profileFragment = UserAreaFragment()
 
-        makeCurrentFragment(issueFragment)
+        if(intent.isNullOrBlank()){
+            makeCurrentFragment(issueFragment)
+        }else{
+            when(intent){
+                "reports" -> {makeCurrentFragment(reportsNotesFragment)
+                bottom_navigation.setSelectedItemId(R.id.icon_notes)
+                }
+                "profile" -> {makeCurrentFragment(profileFragment)
+                bottom_navigation.setSelectedItemId(R.id.icon_profile)
+                }
+            }
+        }
 
         bottom_navigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
