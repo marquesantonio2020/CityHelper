@@ -17,8 +17,6 @@ class MainActivity : AppCompatActivity() {
         //get intention if exists - This intention occurs when the user goes from an activity back to bottom nav bar fragments
         var intent = intent.getStringExtra(INTENT_PARAM)
 
-        Toast.makeText(this, "${intent}", Toast.LENGTH_SHORT).show()
-
         val issueFragment = IssueMapFragment()
         val reportsNotesFragment = ReportsNotesFragment()
         val profileFragment = UserAreaFragment()
