@@ -1,11 +1,13 @@
 package ipvc.estg.cityhelper.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ipvc.estg.cityhelper.R
+import ipvc.estg.cityhelper.ReportDescription
 import ipvc.estg.cityhelper.dataclasses.Report
 import kotlinx.android.synthetic.main.recycler_report_list_element.view.*
 
@@ -43,8 +45,14 @@ class LineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
     init{
         itemView.setOnClickListener{ v: View ->
+            //Adapter Positon return the value of the selected recycler view item
             var position: Int = adapterPosition
-            Toast.makeText(itemView.context, "you clicked on $position", Toast.LENGTH_LONG).show()
+            //v.context returns the context of which the element is inserted into
+            val intent = Intent(v.context, ReportDescription::class.java).apply {
+                putExtra("reportId", position)
+            }
+            //Opens ReportDescription Activity
+            v.context.startActivity(intent)
         }
     }
 }
