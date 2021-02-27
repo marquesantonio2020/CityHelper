@@ -10,4 +10,9 @@
     <string name="reports">Minhas Denuncias</string>
     <string name="notes">Minhas Notas</string>
     <string name="button_goto">Ir para</string>
+
+    <!--Strings para o elemento da lista recyclerview  das denuncias-->
+    <string name="report_title">Título Denuncia</string>
+    <string name="report_description_preview">Descrição Prévia da Denuncia</string>
+    <string name="report_location">Rua Exemplor, Cidade 1</string>
 </resources>
