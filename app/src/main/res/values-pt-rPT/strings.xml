@@ -15,4 +15,8 @@
     <string name="report_title">Título Denuncia</string>
     <string name="report_description_preview">Descrição Prévia da Denuncia</string>
     <string name="report_location">Rua Exemplor, Cidade 1</string>
+
+    <!--Strings para o elemento da lista recyclerview  das notas-->
+    <string name="note_title">Título da Nota</string>
+    <string name="note_description">Descripção prévia da nota</string>
 </resources>

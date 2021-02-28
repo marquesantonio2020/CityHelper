@@ -4,18 +4,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import ipvc.estg.cityhelper.adapters.ReportListAdapter
+import ipvc.estg.cityhelper.adapters.NoteListAdapter
+import ipvc.estg.cityhelper.dataclasses.Note
 import ipvc.estg.cityhelper.dataclasses.Report
+import kotlinx.android.synthetic.main.activity_user_note_list_acitivity.*
 import kotlinx.android.synthetic.main.activity_user_report_list.*
 
-const val INTENT_PARAM = "fragment_report_note"
+class UserNoteListAcitivity : AppCompatActivity() {
 
-class UserReportListActivity : AppCompatActivity() {
-    private lateinit var reportList: ArrayList<Report>
+    private lateinit var noteList: ArrayList<Note>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_report_list)
+        setContentView(R.layout.activity_user_note_list_acitivity)
 
         //Applies back button to Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -24,16 +25,16 @@ class UserReportListActivity : AppCompatActivity() {
         /** Data Injection to Recycler View*/
 
         //DataClass Constructor
-        reportList = ArrayList<Report>()
+        noteList = ArrayList<Note>()
 
         //Example for data injection
         for(i in 0 until 100){
-            reportList.add(Report("Title $i", "Description $i", "Street Example $i, City $i"))
+            noteList.add(Note("Title $i", "Description $i"))
         }
 
         //Gives recycler view the created adapter
-        report_recycler_view.adapter = ReportListAdapter(reportList)
-        report_recycler_view.layoutManager = LinearLayoutManager(this)
+        note_recycler_view.adapter = NoteListAdapter(noteList)
+        note_recycler_view.layoutManager = LinearLayoutManager(this)
 
         /***********************************/
     }
@@ -45,5 +46,3 @@ class UserReportListActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
-

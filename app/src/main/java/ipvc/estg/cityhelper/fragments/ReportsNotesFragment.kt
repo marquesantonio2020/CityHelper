@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import ipvc.estg.cityhelper.R
+import ipvc.estg.cityhelper.UserNoteListAcitivity
 import ipvc.estg.cityhelper.UserReportListActivity
 
 private lateinit var toReportBtn : ImageButton
+private lateinit var toNoteBtn : ImageButton
+
 
 class ReportsNotesFragment : Fragment() {
     override fun onCreateView(
@@ -25,6 +28,14 @@ class ReportsNotesFragment : Fragment() {
 
         toReportBtn.setOnClickListener{
             val intent = Intent(this.context, UserReportListActivity::class.java)
+
+            startActivity(intent)
+        }
+
+        toNoteBtn = root.findViewById(R.id.button_goto_notes)
+
+        toNoteBtn.setOnClickListener{
+            val intent = Intent(this.context, UserNoteListAcitivity::class.java)
 
             startActivity(intent)
         }
