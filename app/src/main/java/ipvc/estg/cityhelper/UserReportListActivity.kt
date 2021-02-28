@@ -3,6 +3,7 @@ package ipvc.estg.cityhelper
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import ipvc.estg.cityhelper.adapters.ReportListAdapter
 import ipvc.estg.cityhelper.dataclasses.Report
@@ -12,6 +13,7 @@ const val INTENT_PARAM = "fragment_report_note"
 
 class UserReportListActivity : AppCompatActivity() {
     private lateinit var reportList: ArrayList<Report>
+    private lateinit var addReportBtn: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,7 @@ class UserReportListActivity : AppCompatActivity() {
         //Applies back button to Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setTitle(R.string.reports)
 
         /** Data Injection to Recycler View*/
 
@@ -36,6 +39,18 @@ class UserReportListActivity : AppCompatActivity() {
         report_recycler_view.layoutManager = LinearLayoutManager(this)
 
         /***********************************/
+
+        /**Floating button action *********/
+
+        addReportBtn = findViewById(R.id.btn_addReport)
+
+        addReportBtn.setOnClickListener{view ->
+            val intent = Intent(this, CreateReportActivity::class.java)
+
+            startActivity(intent)
+        }
+
+        /**********************************/
     }
 
     override fun onBackPressed() {

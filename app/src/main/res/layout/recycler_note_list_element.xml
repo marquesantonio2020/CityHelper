@@ -5,9 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/report_notes_area_borders"
+    android:background="@drawable/note_grid_shadow"
     android:clickable="true"
-    android:foreground="?selectableItemBackground">
+    android:foreground="?selectableItemBackground"
+    android:layout_margin="10dp">
 
     <TextView
         android:id="@+id/note_list_title"
@@ -23,33 +24,33 @@
         android:id="@+id/note_list_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/note_description"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp"
+        android:text="@string/note_description"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/note_list_title" />
 
     <ImageButton
         android:id="@+id/btn_note_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp"
         android:background="?android:attr/windowBackground"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/note_list_description"
         app:srcCompat="@drawable/ic_baseline_delete_24" />
 
     <ImageButton
         android:id="@+id/btn_note_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        android:layout_marginBottom="5dp"
+        android:layout_marginVertical="10dp"
         android:layout_marginEnd="10dp"
+        android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_note_delete"
+        app:layout_constraintTop_toBottomOf="@+id/note_list_description"
         app:srcCompat="@drawable/ic_baseline_edit_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

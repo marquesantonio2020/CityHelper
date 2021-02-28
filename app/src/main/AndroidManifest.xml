@@ -9,11 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NoteDescriptionActivity" android:parentActivityName=".UserNoteListAcitivity"></activity>
+        <activity android:name=".CreateNoteActivity"></activity>
+        <activity android:name=".CreateReportActivity" />
+        <activity
+            android:name=".NoteDescriptionActivity"
+            android:parentActivityName=".UserNoteListAcitivity" />
         <activity
             android:name=".UserNoteListAcitivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".ReportDescriptionActivity" android:parentActivityName=".UserReportListActivity" />
+        <activity
+            android:name=".ReportDescriptionActivity"
+            android:parentActivityName=".UserReportListActivity" />
         <activity
             android:name=".UserReportListActivity"
             android:parentActivityName=".MainActivity" />

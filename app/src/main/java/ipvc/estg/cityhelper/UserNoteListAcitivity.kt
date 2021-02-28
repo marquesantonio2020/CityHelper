@@ -3,6 +3,8 @@ package ipvc.estg.cityhelper
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import ipvc.estg.cityhelper.adapters.NoteListAdapter
 import ipvc.estg.cityhelper.dataclasses.Note
@@ -13,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_user_report_list.*
 class UserNoteListAcitivity : AppCompatActivity() {
 
     private lateinit var noteList: ArrayList<Note>
+    private lateinit var addNoteBtn: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +24,7 @@ class UserNoteListAcitivity : AppCompatActivity() {
         //Applies back button to Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setTitle(R.string.notes)
 
         /** Data Injection to Recycler View*/
 
@@ -34,9 +38,21 @@ class UserNoteListAcitivity : AppCompatActivity() {
 
         //Gives recycler view the created adapter
         note_recycler_view.adapter = NoteListAdapter(noteList)
-        note_recycler_view.layoutManager = LinearLayoutManager(this)
+        note_recycler_view.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false)
 
         /***********************************/
+
+        /**Floating button action *********/
+
+        addNoteBtn = findViewById(R.id.btn_addNote)
+
+        addNoteBtn.setOnClickListener{view ->
+            val intent = Intent(this, CreateNoteActivity::class.java)
+
+            startActivity(intent)
+        }
+
+        /**********************************/
     }
 
     override fun onBackPressed() {
