@@ -1,5 +1,6 @@
 package ipvc.estg.cityhelper.adapters
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import ipvc.estg.cityhelper.NoteDescriptionActivity
 import ipvc.estg.cityhelper.R
 import ipvc.estg.cityhelper.ReportDescriptionActivity
-import ipvc.estg.cityhelper.dataclasses.Note
+import ipvc.estg.cityhelper.dataclasses.NoteDataClass
+import ipvc.estg.cityhelper.dataclasses.Report
 import kotlinx.android.synthetic.main.recycler_note_list_element.view.*
 
-class NoteListAdapter (val list: ArrayList<Note>):RecyclerView.Adapter<LineNoteViewHolder>(){
+class NoteListAdapter(val list: ArrayList<NoteDataClass>):RecyclerView.Adapter<LineNoteViewHolder>(){
+
     //Responsible for creating each list element of recycler
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineNoteViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recycler_note_list_element, parent, false)
@@ -40,7 +43,7 @@ class LineNoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     init{
         itemView.setOnClickListener{ v: View ->
             //Adapter Positon return the value of the selected recycler view item
-            var position: Int = adapterPosition
+            val position: Int = adapterPosition
             //v.context returns the context of which the element is inserted into
             val intent = Intent(v.context, NoteDescriptionActivity::class.java).apply {
                 putExtra("reportId", position)

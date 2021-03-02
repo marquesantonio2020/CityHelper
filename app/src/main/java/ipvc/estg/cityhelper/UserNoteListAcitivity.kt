@@ -7,14 +7,12 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import ipvc.estg.cityhelper.adapters.NoteListAdapter
-import ipvc.estg.cityhelper.dataclasses.Note
-import ipvc.estg.cityhelper.dataclasses.Report
+import ipvc.estg.cityhelper.dataclasses.NoteDataClass
 import kotlinx.android.synthetic.main.activity_user_note_list_acitivity.*
-import kotlinx.android.synthetic.main.activity_user_report_list.*
 
 class UserNoteListAcitivity : AppCompatActivity() {
 
-    private lateinit var noteList: ArrayList<Note>
+    private lateinit var noteList: ArrayList<NoteDataClass>
     private lateinit var addNoteBtn: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,11 +27,11 @@ class UserNoteListAcitivity : AppCompatActivity() {
         /** Data Injection to Recycler View*/
 
         //DataClass Constructor
-        noteList = ArrayList<Note>()
+        noteList = ArrayList<NoteDataClass>()
 
         //Example for data injection
         for(i in 0 until 100){
-            noteList.add(Note("Title $i", "Description $i"))
+            noteList.add(NoteDataClass("Title $i", "Description $i"))
         }
 
         //Gives recycler view the created adapter
