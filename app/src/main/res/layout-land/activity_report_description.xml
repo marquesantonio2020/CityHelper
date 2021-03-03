@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ReportDescriptionActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_margin="15dp">
+
+        <ImageView
+            android:id="@+id/report_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/notes"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+        <TextView
+            android:id="@+id/report_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_user"
+            android:layout_below="@+id/report_image"
+            android:layout_alignParentStart="true"
+            android:layout_alignEnd="@+id/report_image"/>
+
+        <TextView
+            android:id="@+id/report_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_title"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/report_image"/>
+
+        <TextView
+            android:id="@+id/report_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_location"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/report_image"
+            android:layout_below="@+id/report_title"/>
+
+        <TextView
+            android:id="@+id/report_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/report_description_preview"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/report_image"
+            android:layout_below="@id/report_location"/>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/red_border"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/report_image"
+            android:layout_below="@id/report_description">
+            <TextView
+                android:id="@+id/report_description_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lorem_ipsum"
+                android:padding="10dp"
+                app:layout_constraintStart_toStartOf="parent"/>
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/report_user"
+            android:layout_alignParentStart="true"
+            android:layout_alignEnd="@+id/report_user"
+            android:layout_alignParentBottom="true"
+            style="?android:attr/buttonBarStyle">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_edit"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/textColor"
+                android:layout_weight="1"
+                android:layout_marginVertical="10dp"
+                style="?android:attr/buttonBarButtonStyle"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_delete"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/textColor"
+                android:layout_weight="1"
+                style="?android:attr/buttonBarButtonStyle"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
