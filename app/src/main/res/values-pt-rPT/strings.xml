@@ -12,6 +12,7 @@
     <string name="button_goto">Ir para</string>
     <string name="btn_delete">Apagar</string>
     <string name="btn_edit">Editar</string>
+    <string name="btn_create">Criar</string>
 
     <!--Strings para o elemento da lista recyclerview  das denuncias-->
     <string name="report_title">Título Denuncia</string>
@@ -22,4 +23,10 @@
     <!--Strings para o elemento da lista recyclerview  das notas-->
     <string name="note_title">Título da Nota</string>
     <string name="note_description">Descripção prévia da nota</string>
+
+    <!--Strings para a criação da nota-->
+    <string name="note_title_create">O título da sua nota</string>
+    <string name="note_description_create">Descrição da nota</string>
+    <string name="description">Descrição</string>
+
 </resources>

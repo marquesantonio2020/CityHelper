@@ -13,9 +13,9 @@
         <activity android:name=".CreateReportActivity" />
         <activity
             android:name=".NoteDescriptionActivity"
-            android:parentActivityName=".UserNoteListAcitivity" />
+            android:parentActivityName=".UserNoteListActivity" />
         <activity
-            android:name=".UserNoteListAcitivity"
+            android:name=".UserNoteListActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ReportDescriptionActivity"

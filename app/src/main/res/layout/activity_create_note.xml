@@ -4,6 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".CreateNoteActivity">
 
+    <TextView
+        android:id="@+id/note_create_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/note_title"
+        android:layout_marginBottom="5dp"/>
+
+    <EditText
+        android:id="@+id/note_create_title_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/note_title_create"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/note_create_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/description"
+        android:layout_marginBottom="5dp"/>
+
+    <EditText
+        android:id="@+id/note_create_description_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/note_description_create"
+        android:layout_marginBottom="5dp"/>
+
+    <Button
+        android:id="@+id/btn_create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_create"
+        android:textColor="@color/textColor"
+        android:background="@color/colorPrimary"
+        android:onClick="createNote"/>
 </LinearLayout>
