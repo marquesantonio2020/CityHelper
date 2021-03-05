@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +18,7 @@ import ipvc.estg.cityhelper.entities.Note
 import ipvc.estg.cityhelper.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.activity_user_note_list_acitivity.*
 
-class UserNoteListActivity : AppCompatActivity() {
+class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInterface{
 
     private lateinit var noteViewModel : NoteViewModel
     private lateinit var addNoteBtn: View
@@ -35,14 +36,14 @@ class UserNoteListActivity : AppCompatActivity() {
         supportActionBar?.setTitle(R.string.notes)
 
         /** Data Injection to Recycler View*/
-        val adapter = NoteListAdapter(this)
+        val adapter = NoteListAdapter(this, this)
         //Gives recycler view the created adapter
         note_recycler_view.adapter = adapter
         note_recycler_view.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false)
 
         /***********************************/
 
-        /**View Model***********************/
+        /**View Model for Note Entity***********************/
 
         noteViewModel = ViewModelProvider.AndroidViewModelFactory(application).create(NoteViewModel::class.java)
         noteViewModel.allNotes.observe(this, Observer { notes ->
@@ -51,7 +52,7 @@ class UserNoteListActivity : AppCompatActivity() {
 
         /**********************************/
 
-        /**Floating button action *********/
+        /**Floating button action - Add Note*/
 
         addNoteBtn = findViewById(R.id.btn_addNote)
 
@@ -62,6 +63,13 @@ class UserNoteListActivity : AppCompatActivity() {
         }
 
         /**********************************/
+
+        /**Delete Image Button Action*/
+
+
+        /**********************************/
+
+
     }
 
     override fun onBackPressed() {
@@ -73,8 +81,6 @@ class UserNoteListActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        Log.d("TESTE", "${requestCode} e ${resultCode}" )
 
         if(requestCode == newNoteActivityRequestCode && resultCode == Activity.RESULT_OK){
             data?.getStringExtra(CreateNoteActivity.TITLE)?.let{
@@ -91,4 +97,9 @@ class UserNoteListActivity : AppCompatActivity() {
             Toast.LENGTH_LONG).show()
         }
     }
+
+    override fun returnNoteTitle(noteTitle: String) {
+        noteViewModel.deleteByTitle(noteTitle)
+    }
+
 }

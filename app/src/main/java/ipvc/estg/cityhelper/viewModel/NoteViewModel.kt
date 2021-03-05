@@ -28,7 +28,15 @@ class NoteViewModel(application: Application) : AndroidViewModel(application){
     /**
      * Lauching a new coroutine to insert the data in a non-blocking way
      */
+    fun getNoteByTitle(title: String) = viewModelScope.launch (Dispatchers.IO){
+        repository.getNoteByTitle(title)
+    }
+
     fun insert(note: Note) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(note)
+    }
+
+    fun deleteByTitle(title: String) = viewModelScope.launch(Dispatchers.IO){
+        repository.deleteByTitle(title)
     }
 }
