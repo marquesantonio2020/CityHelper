@@ -16,7 +16,7 @@ import ipvc.estg.cityhelper.dataclasses.Report
 import ipvc.estg.cityhelper.entities.Note
 import kotlinx.android.synthetic.main.recycler_note_list_element.view.*
 
-const val NOTE_ID = "reportId"
+const val NOTE_TITLE = "noteTitle"
 
 class NoteListAdapter internal constructor(
     context: Context,
@@ -39,7 +39,7 @@ class NoteListAdapter internal constructor(
                 val noteSelected: String = title.text.toString()
                 //v.context returns the context of which the element is inserted into
                 val intent = Intent(v.context, NoteDescriptionActivity::class.java).apply {
-                    putExtra(NOTE_ID, noteSelected)
+                    putExtra(NOTE_TITLE, noteSelected)
                 }
                 //Opens ReportDescription Activity
                 v.context.startActivity(intent)

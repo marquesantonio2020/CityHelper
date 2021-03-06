@@ -17,8 +17,6 @@ class CreateNoteActivity : AppCompatActivity() {
 
     private lateinit var createNoteTitle: EditText
     private lateinit var createNoteDescription: EditText
-    private lateinit var createNoteTitleTextView : TextView
-    private lateinit var createNoteDescriptionTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,14 +62,14 @@ class CreateNoteActivity : AppCompatActivity() {
         const val DESCRIPTION = "Description"
     }
 
-    fun placeError(viewID: Int){
+    private fun placeError(viewID: Int){
         var targetView = findViewById<TextView>(viewID)
 
         targetView.setTextColor(ContextCompat.getColor(this, R.color.errorTextColor))
 
     }
 
-    fun resetError(viewID: Int){
+    private fun resetError(viewID: Int){
         var targetView = findViewById<TextView>(viewID)
 
         targetView.setTextColor(ContextCompat.getColor(this, R.color.defaultTextColor))

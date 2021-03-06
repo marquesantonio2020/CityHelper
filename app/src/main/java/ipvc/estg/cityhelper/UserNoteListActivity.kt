@@ -2,6 +2,7 @@ package ipvc.estg.cityhelper
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -24,11 +25,15 @@ class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInt
     private lateinit var addNoteBtn: View
     private lateinit var noteTitle: String
     private lateinit var noteDescription: String
+    private var gridSpan: Int = 2
+    private var orientation: Int = 0
     private val newNoteActivityRequestCode = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_note_list_acitivity)
+
+        orientation = resources.configuration.orientation
 
         //Applies back button to Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -39,8 +44,11 @@ class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInt
         val adapter = NoteListAdapter(this, this)
         //Gives recycler view the created adapter
         note_recycler_view.adapter = adapter
-        note_recycler_view.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false)
-
+        if(orientation == Configuration.ORIENTATION_PORTRAIT){
+            note_recycler_view.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false)
+        }else{
+            note_recycler_view.layoutManager = GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false)
+        }
         /***********************************/
 
         /**View Model for Note Entity***********************/
@@ -61,11 +69,6 @@ class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInt
 
             startActivityForResult(intent, newNoteActivityRequestCode)
         }
-
-        /**********************************/
-
-        /**Delete Image Button Action*/
-
 
         /**********************************/
 
@@ -91,15 +94,21 @@ class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInt
             }
             val insertedNote = Note(title = noteTitle, description = noteDescription)
             noteViewModel.insert(insertedNote)
+
+            Toast.makeText(applicationContext,
+                R.string.missing_fields,
+                Toast.LENGTH_LONG).show()
+
         } else{
             Toast.makeText(applicationContext,
-            "Nota encontra-se vazia",
+            R.string.missing_fields,
             Toast.LENGTH_LONG).show()
         }
     }
 
     override fun returnNoteTitle(noteTitle: String) {
         noteViewModel.deleteByTitle(noteTitle)
+        Toast.makeText(this, R.string.successful_delete, Toast.LENGTH_LONG).show()
     }
 
 }

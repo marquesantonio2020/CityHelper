@@ -11,11 +11,8 @@
     <string name="notes">My Notes</string>
     <string name="button_goto">Go to</string>
     <string name="lorem_ipsum" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim praesent elementum facilisis leo vel. Elementum eu facilisis sed odio morbi quis commodo odio aenean. Et malesuada fames ac turpis egestas sed tempus urna. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar. Sit amet cursus sit amet dictum sit amet justo. Ut consequat semper viverra nam libero justo. Justo laoreet sit amet cursus sit amet dictum sit. Elit eget gravida cum sociis natoque penatibus et. Sodales ut eu sem integer vitae justo eget. Venenatis tellus in metus vulputate.
-
 Ac ut consequat semper viverra nam. Ultricies mi quis hendrerit dolor magna eget. Purus viverra accumsan in nisl nisi scelerisque. Donec ultrices tincidunt arcu non sodales neque. Vivamus at augue eget arcu dictum. Nulla aliquet porttitor lacus luctus accumsan. Diam sit amet nisl suscipit adipiscing bibendum est ultricies. Mauris commodo quis imperdiet massa tincidunt nunc. Quam quisque id diam vel quam elementum pulvinar etiam non. Dictum varius duis at consectetur lorem donec massa.
-
 Massa eget egestas purus viverra accumsan in nisl nisi. Est velit egestas dui id ornare arcu odio. Eget arcu dictum varius duis at consectetur lorem donec massa. Elit ut aliquam purus sit. Tempus egestas sed sed risus pretium quam vulputate dignissim suspendisse. Lorem dolor sed viverra ipsum nunc. Tincidunt eget nullam non nisi. Metus vulputate eu scelerisque felis imperdiet proin. Tortor condimentum lacinia quis vel eros donec ac odio tempor. Nulla porttitor massa id neque aliquam vestibulum morbi blandit. Nunc sed augue lacus viverra vitae. Neque egestas congue quisque egestas diam. Turpis massa tincidunt dui ut ornare lectus sit amet.
-
 Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit. Scelerisque eleifend donec pretium vulputate sapien nec sagittis. Pellentesque nec nam aliquam sem et tortor. Vitae suscipit tellus mauris a. A cras semper auctor neque vitae tempus quam. Fringilla est ullamcorper eget nulla facilisi etiam. Neque egestas congue quisque egestas. Dignissim convallis aenean et tortor at. Risus nullam eget felis eget. Tristique senectus et netus et. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Diam in arcu cursus euismod quis viverra nibh. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus et. Enim tortor at auctor urna nunc id cursus metus. Mauris a diam maecenas sed enim ut sem viverra. Non consectetur a erat nam. A cras semper auctor neque vitae tempus. Condimentum id venenatis a condimentum. Fermentum posuere urna nec tincidunt praesent semper feugiat.</string>
     <string name="btn_delete">Delete</string>
     <string name="btn_edit">Edit</string>
@@ -36,7 +33,11 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="note_title_create">Your note title</string>
     <string name="note_description_create">Note description</string>
     <string name="description">Description</string>
+
+    <!--String for Toast Messages-->
     <string name="missing_fields">Some fields are empty</string>
+    <string name="successful_delete">Note deleted successfully</string>
+    <string name="successful_create">Note created successfully</string>
 
 
 </resources>

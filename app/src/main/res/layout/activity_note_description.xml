@@ -42,6 +42,7 @@
 
         <Button
             style="@style/Button"
+            android:id="@+id/note_description_edit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_edit"
@@ -52,6 +53,7 @@
 
         <Button
             style="@style/Button"
+            android:id="@+id/note_description_delete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_delete"
