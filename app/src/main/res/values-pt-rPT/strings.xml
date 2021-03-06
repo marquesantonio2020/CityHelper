@@ -28,5 +28,6 @@
     <string name="note_title_create">O título da sua nota</string>
     <string name="note_description_create">Descrição da nota</string>
     <string name="description">Descrição</string>
+    <string name="missing_fields">Alguns campos encontram-se por preencher</string>
 
 </resources>

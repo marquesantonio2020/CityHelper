@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context=".CreateNoteActivity">
 
     <TextView
+        style="@style/SubTitles"
         android:id="@+id/note_create_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +18,7 @@
 
     <EditText
         android:id="@+id/note_create_title_input"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
@@ -24,6 +26,7 @@
         android:layout_marginBottom="5dp"/>
 
     <TextView
+        style="@style/SubTitles"
         android:id="@+id/note_create_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,19 +35,23 @@
 
     <EditText
         android:id="@+id/note_create_description_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="top|start"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text|textMultiLine"
         android:hint="@string/note_description_create"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+        android:background="@drawable/red_border"/>
 
     <Button
+        style="@style/Button"
         android:id="@+id/btn_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="20dp"
         android:text="@string/btn_create"
-        android:textColor="@color/textColor"
-        android:background="@color/colorPrimary"
         android:onClick="createNote"/>
 </LinearLayout>

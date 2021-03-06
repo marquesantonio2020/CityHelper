@@ -4,5 +4,9 @@
     <color name="colorPrimaryDark">#811D1D</color>
     <color name="colorAccent">#CE2E2E</color>
     <color name="selectedItem">#95CE2E2E</color>
+
+    <!--All applications text colors-->
     <color name="textColor">#fff</color>
+    <color name="defaultTextColor">#000</color>
+    <color name="errorTextColor">#FF0000</color>
 </resources>

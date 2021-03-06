@@ -9,6 +9,7 @@
     tools:context=".NoteDescriptionActivity">
 
     <TextView
+        style="@style/SubTitles"
         android:id="@+id/note_description_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,22 +41,20 @@
         style="?android:attr/buttonBarStyle">
 
         <Button
+            style="@style/Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_edit"
             android:background="@color/colorPrimary"
             android:textColor="@color/textColor"
             android:layout_weight="1"
-            android:layout_marginEnd="20dp"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:layout_marginEnd="20dp" />
 
         <Button
+            style="@style/Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_delete"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/textColor"
-            android:layout_weight="1"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

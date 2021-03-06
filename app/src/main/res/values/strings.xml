@@ -36,7 +36,7 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="note_title_create">Your note title</string>
     <string name="note_description_create">Note description</string>
     <string name="description">Description</string>
-
+    <string name="missing_fields">Some fields are empty</string>
 
 
 </resources>
