@@ -28,15 +28,19 @@ class NoteViewModel(application: Application) : AndroidViewModel(application){
     /**
      * Lauching a new coroutine to insert the data in a non-blocking way
      */
-    fun getNoteByTitle(title: String) = viewModelScope.launch (Dispatchers.IO){
-        repository.getNoteByTitle(title)
+    fun getNoteById(id: Int): LiveData<Note>{
+        return repository.getNoteById(id)
     }
 
     fun insert(note: Note) = viewModelScope.launch(Dispatchers.IO){
         repository.insert(note)
     }
 
-    fun deleteByTitle(title: String) = viewModelScope.launch(Dispatchers.IO){
-        repository.deleteByTitle(title)
+    fun deleteById(id: Int) = viewModelScope.launch(Dispatchers.IO){
+        repository.deleteById(id)
+    }
+
+    fun updateNoteById(id: Int, title: String, description: String) = viewModelScope.launch (Dispatchers.IO){
+        repository.updateNoteById(id, title, description)
     }
 }

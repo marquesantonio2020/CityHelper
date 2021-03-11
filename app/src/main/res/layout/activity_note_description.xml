@@ -12,17 +12,18 @@
         style="@style/SubTitles"
         android:id="@+id/note_description_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:text="@string/note_title"
         android:layout_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="500dp"
         android:background="@drawable/red_border"
-        android:layout_weight="2">
+        android:layout_weight="2"
+        android:layout_marginTop="10dp">
         <TextView
             android:id="@+id/note_description_description"
             android:layout_width="match_parent"
@@ -59,4 +60,27 @@
             android:text="@string/btn_delete"
             android:layout_weight="1" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="5dp">
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/note_description_back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_back"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="80dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/noteId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/note_id"
+        android:visibility="invisible"/>
 </LinearLayout>

@@ -16,7 +16,7 @@ import ipvc.estg.cityhelper.dataclasses.Report
 import ipvc.estg.cityhelper.entities.Note
 import kotlinx.android.synthetic.main.recycler_note_list_element.view.*
 
-const val NOTE_TITLE = "noteTitle"
+const val NOTE_ID = "noteID"
 
 class NoteListAdapter internal constructor(
     context: Context,
@@ -31,22 +31,28 @@ class NoteListAdapter internal constructor(
         val title = itemView.note_list_title
         val description = itemView.note_list_description
         val deleteNoteBtn = itemView.btn_note_delete
+        val editNoteBtn = itemView.btn_note_edit
+        val id = itemView.note_id
 
 
         init{
             itemView.setOnClickListener{ v: View ->
                 //Adapter Position return the value of the selected recycler view item
-                val noteSelected: String = title.text.toString()
+                val noteSelected: Int = Integer.parseInt(id.text.toString())
                 //v.context returns the context of which the element is inserted into
                 val intent = Intent(v.context, NoteDescriptionActivity::class.java).apply {
-                    putExtra(NOTE_TITLE, noteSelected)
+                    putExtra(NOTE_ID, noteSelected)
                 }
                 //Opens ReportDescription Activity
                 v.context.startActivity(intent)
             }
 
             deleteNoteBtn.setOnClickListener{
-                noteInterface.returnNoteTitle(title.text.toString())
+                noteInterface.returnNoteTitle(Integer.parseInt(id.text.toString()))
+            }
+
+            editNoteBtn.setOnClickListener{
+                noteInterface.editNoteById(Integer.parseInt(id.text.toString()), title.text.toString(), description.text.toString())
             }
 
         }
@@ -54,7 +60,8 @@ class NoteListAdapter internal constructor(
     }
 
     interface NoteElementInterface {
-        fun returnNoteTitle(noteTitle: String)
+        fun returnNoteTitle(noteId: Int)
+        fun editNoteById(noteId: Int, noteTitle: String, noteDescription: String)
     }
 
     //Responsible for creating each list element of recycler
@@ -74,6 +81,7 @@ class NoteListAdapter internal constructor(
 
         holder.title.text = currentReport.title
         holder.description.text = currentReport.description
+        holder.id.text = currentReport.id.toString()
     }
 
     //Notifies change on note's list to the adapter

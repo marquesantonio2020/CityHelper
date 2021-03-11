@@ -12,15 +12,18 @@ interface NoteDao {
     @Query("Select * FROM note_table ORDER BY id DESC")
     fun getAllNotes(): LiveData<List<Note>>
 
-    @Query("SELECT * FROM note_table WHERE title = :title")
-    fun getNoteByTitle(title: String): LiveData<Note>
+    @Query("SELECT * FROM note_table WHERE id = :id")
+    fun getNoteById(id: Int): LiveData<Note>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(note: Note)
 
-    @Query("DELETE FROM note_table WHERE title = :title")
-    suspend fun deleteByTitle(title: String)
+    @Query("DELETE FROM note_table WHERE id = :id")
+    suspend fun deleteById(id: Int)
 
     @Query("DELETE FROM note_table")
     suspend fun deleteAll()
+
+    @Query("UPDATE note_table SET title = :title, description = :description WHERE id = :id")
+    suspend fun updateNoteById(id: Int, title: String, description: String)
 }

@@ -10,9 +10,12 @@
     <string name="reports">Minhas Denuncias</string>
     <string name="notes">Minhas Notas</string>
     <string name="button_goto">Ir para</string>
+
+    <!--String for all buttons-->
     <string name="btn_delete">Apagar</string>
     <string name="btn_edit">Editar</string>
     <string name="btn_create">Criar</string>
+    <string name="btn_back">Voltar</string>
 
     <!--Strings para o elemento da lista recyclerview  das denuncias-->
     <string name="report_title">Título Denuncia</string>
@@ -23,6 +26,7 @@
     <!--Strings para o elemento da lista recyclerview  das notas-->
     <string name="note_title">Título da Nota</string>
     <string name="note_description">Descripção prévia da nota</string>
+    <string name="note_id">1</string>
 
     <!--Strings para a criação da nota-->
     <string name="note_title_create">O título da sua nota</string>
@@ -33,6 +37,7 @@
     <string name="missing_fields">Alguns campos encontram-se por preencher</string>
     <string name="successful_delete">Nota apagada com sucesso</string>
     <string name="successful_create">Nota criada com sucesso</string>
+
 
 
 </resources>

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -45,13 +48,30 @@
         android:padding="5dp"
         android:background="@drawable/red_border"/>
 
-    <Button
-        style="@style/Button"
-        android:id="@+id/btn_create"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="80dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/btn_create"
-        android:onClick="createNote"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/btn_create"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_create"
+            android:onClick="createNote"
+            android:layout_weight="1"
+            android:layout_marginEnd="20dp"/>
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/btn_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_back"
+            android:onClick="createNote"
+            android:layout_weight="1"/>
+    </LinearLayout>
 </LinearLayout>
+</ScrollView>

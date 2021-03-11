@@ -13,6 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import ipvc.estg.cityhelper.CreateNoteActivity.Companion.TOEDIT
+import ipvc.estg.cityhelper.adapters.NOTE_ID
 import ipvc.estg.cityhelper.adapters.NoteListAdapter
 import ipvc.estg.cityhelper.dataclasses.NoteDataClass
 import ipvc.estg.cityhelper.entities.Note
@@ -25,6 +27,7 @@ class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInt
     private lateinit var addNoteBtn: View
     private lateinit var noteTitle: String
     private lateinit var noteDescription: String
+    private lateinit var noteId: String
     private var gridSpan: Int = 2
     private var orientation: Int = 0
     private val newNoteActivityRequestCode = 1
@@ -92,13 +95,17 @@ class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInt
             data?.getStringExtra(CreateNoteActivity.DESCRIPTION)?.let{
                 noteDescription = it
             }
-            val insertedNote = Note(title = noteTitle, description = noteDescription)
-            noteViewModel.insert(insertedNote)
+            if(data?.getBooleanExtra(TOEDIT, false)!!){
+                val id: Int = data?.getIntExtra(NOTE_ID, 0)
+                noteViewModel.updateNoteById(id, noteTitle, noteDescription)
+            }else{
+                val insertedNote = Note(title = noteTitle, description = noteDescription)
+                noteViewModel.insert(insertedNote)
 
-            Toast.makeText(applicationContext,
-                R.string.missing_fields,
-                Toast.LENGTH_LONG).show()
-
+                Toast.makeText(applicationContext,
+                    R.string.successful_create,
+                    Toast.LENGTH_LONG).show()
+            }
         } else{
             Toast.makeText(applicationContext,
             R.string.missing_fields,
@@ -106,9 +113,20 @@ class UserNoteListActivity : AppCompatActivity(), NoteListAdapter.NoteElementInt
         }
     }
 
-    override fun returnNoteTitle(noteTitle: String) {
-        noteViewModel.deleteByTitle(noteTitle)
+    override fun returnNoteTitle(noteId: Int) {
+        noteViewModel.deleteById(noteId)
         Toast.makeText(this, R.string.successful_delete, Toast.LENGTH_LONG).show()
+    }
+
+    override fun editNoteById(noteId: Int, noteTitle: String, noteDescription: String) {
+        var intent = Intent(this, CreateNoteActivity::class.java)
+
+        //Toast.makeText(this, "${noteTitle.text}", Toast.LENGTH_LONG).show()
+        intent.putExtra(NOTE_ID, noteId)
+        intent.putExtra(NoteDescriptionActivity.SENDING_TITLE, noteTitle)
+        intent.putExtra(NoteDescriptionActivity.SENDING_DESCRIPTION, noteDescription)
+
+        startActivity(intent)
     }
 
 }
