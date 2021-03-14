@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/report_notes_area_borders"
     android:clickable="true"
+    android:focusable="true"
     android:foreground="?selectableItemBackground">
 
 
@@ -14,11 +15,13 @@
         android:id="@+id/report_list_image"
         android:layout_width="107dp"
         android:layout_height="105dp"
+        android:src="@drawable/no_image"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        style="@style/SubTitles"
         android:id="@+id/report_list_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,8 +35,15 @@
         android:id="@+id/report_list_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/report_description_preview"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingEnd="5dp"
+        android:text="@string/report_description_preview"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/btn_report_edit"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/report_list_image"
         app:layout_constraintTop_toBottomOf="@+id/report_list_title" />
 
@@ -41,10 +51,12 @@
         android:id="@+id/report_list_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/report_location"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/report_location"
         app:layout_constraintBottom_toBottomOf="@+id/report_list_image"
+        app:layout_constraintEnd_toStartOf="@+id/btn_report_delete"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/report_list_image" />
 
     <ImageButton

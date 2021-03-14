@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ipvc.estg.cityhelper.CreateNoteActivity.Companion.TOEDIT
 import ipvc.estg.cityhelper.adapters.NOTE_ID
 import ipvc.estg.cityhelper.adapters.NoteListAdapter
-import ipvc.estg.cityhelper.dataclasses.NoteDataClass
 import ipvc.estg.cityhelper.entities.Note
 import ipvc.estg.cityhelper.viewModel.NoteViewModel
 import kotlinx.android.synthetic.main.activity_user_note_list_acitivity.*

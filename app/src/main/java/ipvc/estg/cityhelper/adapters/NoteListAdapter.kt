@@ -5,14 +5,9 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import ipvc.estg.cityhelper.CreateNoteActivity
 import ipvc.estg.cityhelper.NoteDescriptionActivity
 import ipvc.estg.cityhelper.R
-import ipvc.estg.cityhelper.ReportDescriptionActivity
-import ipvc.estg.cityhelper.dataclasses.NoteDataClass
-import ipvc.estg.cityhelper.dataclasses.Report
 import ipvc.estg.cityhelper.entities.Note
 import kotlinx.android.synthetic.main.recycler_note_list_element.view.*
 

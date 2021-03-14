@@ -44,5 +44,13 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="successful_create">Note created successfully</string>
 
 
+    <!--Strings for Login Page-->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="no_account"><u>Don\'t have an account? Register here!</u></string>
+    <string name="app_slogan">Help us helping you</string>
+    <string name="my_notes">Just my notes</string>
+
 
 </resources>

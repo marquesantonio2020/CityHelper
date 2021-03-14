@@ -39,5 +39,13 @@
     <string name="successful_create">Nota criada com sucesso</string>
 
 
+    <!--Strings para a página de Login-->
+    <string name="username">Utilizador</string>
+    <string name="password">Password</string>
+    <string name="login">Entrar</string>
+    <string name="no_account"><u>Não tem conta? Registe-se aqui!</u></string>
+    <string name="app_slogan">Ajude-nos a ajudá-lo</string>
+    <string name="my_notes">Só as minhas notas</string>
+
 
 </resources>
