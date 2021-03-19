@@ -20,8 +20,9 @@
     <!--Strings para o elemento da lista recyclerview  das denuncias-->
     <string name="report_title">Título Denuncia</string>
     <string name="report_description_preview">Descrição Prévia da Denuncia</string>
-    <string name="report_location">Rua Exemplor, Cidade 1</string>
+    <string name="report_location">Rua Exemplo</string>
     <string name="report_user">Criado por: Utilizador Exemplo</string>
+    <string name="report_city">Cidade 1</string>
 
     <!--Strings para o elemento da lista recyclerview  das notas-->
     <string name="note_title">Título da Nota</string>
@@ -32,6 +33,13 @@
     <string name="note_title_create">O título da sua nota</string>
     <string name="note_description_create">Descrição da nota</string>
     <string name="description">Descrição</string>
+
+    <!--String para a criação da denúncia-->
+    <string name="report_title_hint">O título da denúncia</string>
+    <string name="report_description_hint">Escreva uma pequena descrição para ajudar outros utilizadores a perceberem o problema</string>
+    <string name="report_location_title">Rua e cidade da denúncia</string>
+    <string name="report_location_hint1">Rua Exemplo</string>
+    <string name="report_location_hint2">Local Exemplo</string>
 
     <!--String para as mensagens Toast-->
     <string name="missing_fields">Alguns campos encontram-se por preencher</string>
@@ -46,6 +54,7 @@
     <string name="no_account"><u>Não tem conta? Registe-se aqui!</u></string>
     <string name="app_slogan">Ajude-nos a ajudá-lo</string>
     <string name="my_notes">Só as minhas notas</string>
+    <string name="error_login">Utilizador ou password estão incorretos</string>
 
 
 </resources>

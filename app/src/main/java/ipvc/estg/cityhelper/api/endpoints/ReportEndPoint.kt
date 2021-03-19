@@ -11,4 +11,7 @@ interface ReportEndPoint {
 
     @GET("/COMMOV_APIS/index.php/api/reports/user/{id}")
     fun getReportsOfUser(@Path("id") id:Int): Call<List<ReportData>>
+
+    @GET("/COMMOV_APIS/index.php/api/report/{id}")
+    fun getSingleReport(@Path("id") id: Int): Call<ReportData>
 }

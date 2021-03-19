@@ -19,7 +19,7 @@
             android:layout_height="150dp"
             android:layout_alignParentTop="true"
             android:contentDescription="@string/notes"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:src="@drawable/no_image" />
 
 
         <TextView
@@ -48,16 +48,24 @@
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/report_image"
             android:layout_below="@+id/report_title"/>
+        <TextView
+            android:id="@+id/report_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_city"
+            android:layout_marginStart="10dp"
+            android:layout_below="@id/report_location"
+            android:layout_toEndOf="@+id/report_image"/>
 
         <TextView
             android:id="@+id/report_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/report_description_preview"
+            android:text="@string/description"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/report_image"
-            android:layout_below="@id/report_location"/>
+            android:layout_below="@id/report_city"/>
 
 
         <androidx.core.widget.NestedScrollView

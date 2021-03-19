@@ -24,8 +24,9 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <!--String for RecyclerView Report List Element-->
     <string name="report_title">Report Title</string>
     <string name="report_description_preview">Report Description Preview</string>
-    <string name="report_location">Random street, City 1</string>
+    <string name="report_location">Random street</string>
     <string name="report_user">Created by: Example User</string>
+    <string name="report_city">City 1</string>
 
 
     <!--String for RecyclerView Note List Element-->
@@ -37,6 +38,13 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="note_title_create">Your note title</string>
     <string name="note_description_create">Note description</string>
     <string name="description">Description</string>
+
+    <!--String for report creation-->
+    <string name="report_title_hint">Your report title</string>
+    <string name="report_description_hint">Write a small description to help others understand the problem</string>
+    <string name="report_location_title">Report location street and city</string>
+    <string name="report_location_hint1">Example Street</string>
+    <string name="report_location_hint2">Location Example</string>
 
     <!--String for Toast Messages-->
     <string name="missing_fields">Some fields are empty</string>
@@ -51,6 +59,20 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="no_account"><u>Don\'t have an account? Register here!</u></string>
     <string name="app_slogan">Help us helping you</string>
     <string name="my_notes">Just my notes</string>
+    <string name="error_login">Username or password are incorrect</string>
 
+    <!--Shared preferences files-->
+    <string name="logindata" translatable="false">login_info</string>
+    <string name="isLogged" translatable="false">isLogged</string>
+    <string name="userId" translatable="false">userId</string>
+
+        <string-array name="Languages">
+            <item>Java</item>
+            <item>Kotlin</item>
+            <item>Swift</item>
+            <item>Python</item>
+            <item>Scala</item>
+            <item>Perl</item>
+        </string-array>
 
 </resources>

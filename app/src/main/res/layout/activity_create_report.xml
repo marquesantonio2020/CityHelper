@@ -6,4 +6,136 @@
     android:layout_height="match_parent"
     tools:context=".CreateReportActivity">
 
+    <ImageView
+        android:id="@+id/report_picture_taken"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/no_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/report_create_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/report_title"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_picture_taken" />
+
+    <EditText
+        android:id="@+id/report_create_title_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/report_title_hint"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_create_title" />
+
+    <TextView
+        android:id="@+id/report_create_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/report_location_title"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_create_title_input" />
+
+    <LinearLayout
+        android:id="@+id/reportLocal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/report_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_create_location">
+        <EditText
+            android:id="@+id/report_create_location_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="@string/report_location_hint1"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/report_create_location"
+            android:layout_weight="1"/>
+        <Spinner
+            android:id="@+id/city_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_weight="1"
+            android:background="@drawable/red_border"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="10dp"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/report_create_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/description"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reportLocal" />
+
+    <EditText
+        android:id="@+id/report_create_description_input"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="top|start"
+        android:ems="10"
+        android:inputType="text|textMultiLine"
+        android:hint="@string/report_description_hint"
+        android:layout_marginHorizontal="10dp"
+        android:padding="5dp"
+        android:background="@drawable/red_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_create_description" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_create_description_input">
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/report_create_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_create"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"/>
+        <Button
+            style="@style/Button"
+            android:id="@+id/report_back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_back"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/add_photo_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="?android:attr/windowBackground"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/report_picture_taken"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_add_a_photo_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,10 +13,12 @@ import ipvc.estg.cityhelper.R
 import ipvc.estg.cityhelper.ReportDescriptionActivity
 import ipvc.estg.cityhelper.api.ReportData
 import kotlinx.android.synthetic.main.recycler_report_list_element.view.*
+import java.lang.Integer.parseInt
 import java.sql.Blob
 import java.util.*
 
 
+const val REPORT_ID = "reportId"
 //Adapter for Report List
 
 class ReportListAdapter(val list: List<ReportData>):RecyclerView.Adapter<ReportViewHolder>(){
@@ -44,6 +46,7 @@ class ReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     val title = itemView.report_list_title
     val description = itemView.report_list_description
     val location = itemView.report_list_location
+    val id = itemView.hidden_report_id
 
     fun bind(reportData: ReportData){
         if(reportData.report.problem_picture != null){
@@ -52,15 +55,14 @@ class ReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         title.text = reportData.report.report_title
         description.text = reportData.report.report_description
         location.text = reportData.city.city_street + " , " + reportData.city.city_name
+        id.text = reportData.report.id.toString()
     }
 
     init{
         itemView.setOnClickListener{ v: View ->
-            //Adapter Positon return the value of the selected recycler view item
-            var position: Int = adapterPosition
             //v.context returns the context of which the element is inserted into
             val intent = Intent(v.context, ReportDescriptionActivity::class.java).apply {
-                putExtra("reportId", position)
+                putExtra(REPORT_ID, parseInt(id.text.toString()))
             }
             //Opens ReportDescription Activity
             v.context.startActivity(intent)
