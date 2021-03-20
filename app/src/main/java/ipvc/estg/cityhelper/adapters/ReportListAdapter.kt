@@ -54,7 +54,7 @@ class ReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         }
         title.text = reportData.report.report_title
         description.text = reportData.report.report_description
-        location.text = reportData.city.city_street + " , " + reportData.city.city_name
+        location.text = reportData.report.report_street + " , " + reportData.city.city_name
         id.text = reportData.report.id.toString()
     }
 

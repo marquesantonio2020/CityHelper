@@ -66,13 +66,5 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="isLogged" translatable="false">isLogged</string>
     <string name="userId" translatable="false">userId</string>
 
-        <string-array name="Languages">
-            <item>Java</item>
-            <item>Kotlin</item>
-            <item>Swift</item>
-            <item>Python</item>
-            <item>Scala</item>
-            <item>Perl</item>
-        </string-array>
 
 </resources>

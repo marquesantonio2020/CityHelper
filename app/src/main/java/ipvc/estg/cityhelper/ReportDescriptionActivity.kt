@@ -65,7 +65,7 @@ class ReportDescriptionActivity : AppCompatActivity() {
         reportUser.text = "Created by: " + reportData.user
         reportTitle.text = reportData.report.report_title
         reportDescription.text = reportData.report.report_description
-        reportLocation.text = reportData.city.city_street
+        reportLocation.text = reportData.report.report_street
         reportCity.text = reportData.city.city_name
 
     }

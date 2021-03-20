@@ -12,6 +12,7 @@ data class Report (
     val id: Int,
     val report_title: String,
     val report_description: String,
+    val report_street: String,
     val report_location_latitude: Double,
     val report_location_longitude: Double,
     val problem_picture: Blob,
@@ -22,6 +23,5 @@ data class City (
     val id: Int,
     val city_lat: Double,
     val city_long: Double,
-    val city_name: String,
-    val city_street: String
+    val city_name: String
 )
