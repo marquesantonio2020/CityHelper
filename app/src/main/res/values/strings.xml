@@ -66,5 +66,8 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="isLogged" translatable="false">isLogged</string>
     <string name="userId" translatable="false">userId</string>
 
+    <!--Map Related String-->
+    <string name="title_activity_maps" translatable="false">Map</string>
+
 
 </resources>
