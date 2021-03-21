@@ -1,5 +1,6 @@
 package ipvc.estg.cityhelper.api.endpoints
 
+import ipvc.estg.cityhelper.api.InsertServerResponse
 import ipvc.estg.cityhelper.api.ReportData
 import ipvc.estg.cityhelper.api.User
 import retrofit2.Call
@@ -22,8 +23,7 @@ interface ReportEndPoint {
                   @Field("report_lat") lat: Double?,
                   @Field("report_long") long: Double?,
                   @Field("report_street") street: String,
-                  @Field("isResolved") isResolved: Boolean,
                   @Field("userId") userId: Int,
                   @Field("cityId") cityId: Int,
-                  @Field("typeId") typeId: Int): Call<ReportData>
+                  @Field("typeId") typeId: Int): Call<InsertServerResponse>
 }

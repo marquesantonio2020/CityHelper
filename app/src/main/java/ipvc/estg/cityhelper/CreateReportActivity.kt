@@ -94,7 +94,6 @@ class CreateReportActivity : AppCompatActivity() {
 
     private fun inflateDataIntoSpinnerCities(spinnerData: List<CountryCity>){
         val cities = ArrayList<String>()
-        Log.v("ReportHERE", "${spinnerData}")
         val iterator = spinnerData.iterator()
 
         iterator.forEach {
@@ -131,23 +130,27 @@ class CreateReportActivity : AppCompatActivity() {
         val sharedPref: SharedPreferences = getSharedPreferences(getString(R.string.logindata), Context.MODE_PRIVATE)
 
         val userID = sharedPref.getInt(getString(R.string.userId), 0)
-
         val selectedCity = cityResponse.get(city).id
         val selectedType = typeResponse.get(type).id
-        Toast.makeText(this@CreateReportActivity, "${selectedCity}", Toast.LENGTH_LONG).show()
-
 
         val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
-        val call = request.newReport(title, description, 2.2222, 2.2222, local, false, userID, selectedCity, selectedType)
+        val call = request.newReport(title, description, 2.2222, 2.2222, local, userID, selectedCity, selectedType)
 
-        call.enqueue(object : Callback<ReportData>{
-            override fun onResponse(call: Call<ReportData>, response: Response<ReportData>) {
+        call.enqueue(object : Callback<InsertServerResponse>{
+            override fun onResponse(call: Call<InsertServerResponse>, response: Response<InsertServerResponse>) {
                 if(response.isSuccessful){
+                    val insertCompleted = response.body()!!
 
+                    if(insertCompleted.status){
+                        Toast.makeText(this@CreateReportActivity, "sucesso", Toast.LENGTH_LONG).show()
+                        finish()
+                    }else{
+                        Toast.makeText(this@CreateReportActivity, "erro", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
-            override fun onFailure(call: Call<ReportData>, t: Throwable) {
+            override fun onFailure(call: Call<InsertServerResponse>, t: Throwable) {
                 Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG).show()
             }
         })

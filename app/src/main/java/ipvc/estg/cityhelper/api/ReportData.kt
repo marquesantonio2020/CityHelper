@@ -5,7 +5,8 @@ import java.sql.Blob
 data class ReportData(
     val report: Report,
     val user: String,
-    val city: City
+    val city: City,
+    val type: Type
 )
 
 data class Report (
