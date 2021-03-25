@@ -1,8 +1,7 @@
 package ipvc.estg.cityhelper.api.endpoints
 
-import ipvc.estg.cityhelper.api.InsertServerResponse
+import ipvc.estg.cityhelper.api.ServerResponse
 import ipvc.estg.cityhelper.api.ReportData
-import ipvc.estg.cityhelper.api.User
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -25,5 +24,22 @@ interface ReportEndPoint {
                   @Field("report_street") street: String,
                   @Field("userId") userId: Int,
                   @Field("cityId") cityId: Int,
-                  @Field("typeId") typeId: Int): Call<InsertServerResponse>
+                  @Field("typeId") typeId: Int): Call<ServerResponse>
+
+    @FormUrlEncoded
+    @POST("/COMMOV_APIS/index.php/api/report/update_report")
+    fun updateReport(@Field("title") title: String?,
+                  @Field("description") description: String?,
+                  @Field("report_lat") lat: Double?,
+                  @Field("report_long") long: Double?,
+                  @Field("report_street") street: String,
+                  @Field("userId") userId: Int,
+                  @Field("cityId") cityId: Int,
+                  @Field("typeId") typeId: Int,
+                  @Field("reportId") reportId: Int): Call<ServerResponse>
+
+    @FormUrlEncoded
+    @POST("/COMMOV_APIS/index.php/api/report/delete")
+    fun deleteReport(@Field("id") id: Int): Call<ServerResponse>
+
 }

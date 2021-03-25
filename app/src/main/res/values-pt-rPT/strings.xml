@@ -37,9 +37,11 @@
     <!--String para a criação da denúncia-->
     <string name="report_title_hint">O título da denúncia</string>
     <string name="report_description_hint">Escreva uma pequena descrição para ajudar outros utilizadores a perceberem o problema</string>
-    <string name="report_location_title">Rua e cidade da denúncia</string>
+    <string name="report_location_title">Rua da denúncia</string>
     <string name="report_location_hint1">Rua Exemplo</string>
     <string name="report_location_hint2">Local Exemplo</string>
+    <string name="report_city_title">Cidade do problema</string>
+    <string name="report_type_problem">Tipo do problema</string>
 
     <!--String para as mensagens Toast-->
     <string name="missing_fields">Alguns campos encontram-se por preencher</string>
@@ -55,6 +57,14 @@
     <string name="app_slogan">Ajude-nos a ajudá-lo</string>
     <string name="my_notes">Só as minhas notas</string>
     <string name="error_login">Utilizador ou password estão incorretos</string>
+
+    <!--Strings for toast responses to Webservices results-->
+    <string name="report_deleted_success">Denúncia foi apagada com sucesso</string>
+    <string name="report_deleted_unseccessfully">Não foi possível apagar a sua denúncia</string>
+    <string name="report_create_success">Denúncia criada com sucesso</string>
+    <string name="report_create_unsuccess">Não foi possível criar a sua nota</string>
+    <string name="report_edit_success">Denúncia editada com sucesso</string>
+    <string name="report_edit_unsuccess">Não foi possível editar a sua denúncia</string>
 
 
 </resources>

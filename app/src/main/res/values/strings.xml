@@ -42,9 +42,10 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <!--String for report creation-->
     <string name="report_title_hint">Your report title</string>
     <string name="report_description_hint">Write a small description to help others understand the problem</string>
-    <string name="report_location_title">Report location street and city</string>
+    <string name="report_location_title">Street Name</string>
     <string name="report_location_hint1">Example Street</string>
     <string name="report_location_hint2">Location Example</string>
+
 
     <!--String for Toast Messages-->
     <string name="missing_fields">Some fields are empty</string>
@@ -68,6 +69,16 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
 
     <!--Map Related String-->
     <string name="title_activity_maps" translatable="false">Map</string>
+
+    <!--Strings for toast responses to Webservices results-->
+    <string name="report_deleted_success">Report was successfully deleted</string>
+    <string name="report_deleted_unseccessfully">Unable to delete your report</string>
+    <string name="report_create_success">Report created successfully</string>
+    <string name="report_create_unsuccess">Unable to create your report</string>
+    <string name="report_edit_success">Report edited successfully</string>
+    <string name="report_edit_unsuccess">Unable to edit report</string>
+    <string name="report_city_title">Problem\'s City</string>
+    <string name="report_type_problem">Type of problem</string>
 
 
 </resources>

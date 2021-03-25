@@ -1,6 +1,6 @@
 package ipvc.estg.cityhelper.api
 
-data class InsertServerResponse (
+data class ServerResponse (
     val status: Boolean,
     val msg: String
 )

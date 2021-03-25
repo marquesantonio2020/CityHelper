@@ -99,6 +99,7 @@
             style="?android:attr/buttonBarStyle">
 
             <Button
+                android:id="@+id/report_description_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_edit"
@@ -109,6 +110,7 @@
                 style="?android:attr/buttonBarButtonStyle"/>
 
             <Button
+                android:id="@+id/report_description_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_delete"

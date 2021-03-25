@@ -6,7 +6,7 @@ data class ReportData(
     val report: Report,
     val user: String,
     val city: City,
-    val type: Type
+    val type: TypeProblem
 )
 
 data class Report (
@@ -25,4 +25,10 @@ data class City (
     val city_lat: Double,
     val city_long: Double,
     val city_name: String
+)
+
+data class TypeProblem (
+    val id: Int,
+    val problem_description: String,
+    val problem_color: Float
 )

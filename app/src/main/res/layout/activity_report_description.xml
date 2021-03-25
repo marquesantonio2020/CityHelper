@@ -84,6 +84,14 @@
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.core.widget.NestedScrollView>
 
+        <TextView
+            android:id="@+id/report_type_problem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_type_problem"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -97,6 +105,7 @@
 
         <Button
             style="@style/Button"
+            android:id="@+id/report_description_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_edit"
@@ -107,6 +116,7 @@
 
         <Button
             style="@style/Button"
+            android:id="@+id/report_description_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_delete"

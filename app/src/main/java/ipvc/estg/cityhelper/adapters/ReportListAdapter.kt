@@ -9,8 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import ipvc.estg.cityhelper.R
-import ipvc.estg.cityhelper.ReportDescriptionActivity
+import ipvc.estg.cityhelper.*
 import ipvc.estg.cityhelper.api.ReportData
 import kotlinx.android.synthetic.main.recycler_report_list_element.view.*
 import java.lang.Integer.parseInt
@@ -21,12 +20,18 @@ import java.util.*
 const val REPORT_ID = "reportId"
 //Adapter for Report List
 
-class ReportListAdapter(val list: List<ReportData>):RecyclerView.Adapter<ReportViewHolder>(){
+class ReportListAdapter(val list: List<ReportData>,
+                        private val noteInterf: ReportElementInterface):RecyclerView.Adapter<ReportViewHolder>(){
+    interface ReportElementInterface {
+        fun deleteReportById(id: Int)
+        fun editReportById(id: Int)
+    }
 
+    private var reportInterface = noteInterf
     //Responsible for creating each list element of recycler
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recycler_report_list_element, parent, false)
-        return ReportViewHolder(itemView)
+        return ReportViewHolder(itemView, reportInterface)
     }
 
     //Indicates the recycler how many items are going to be created
@@ -41,14 +46,19 @@ class ReportListAdapter(val list: List<ReportData>):RecyclerView.Adapter<ReportV
 }
 
 //Creates references to list element views that make up the each recycler view element
-class ReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+class ReportViewHolder(itemView: View, reportInterface: ReportListAdapter.ReportElementInterface) : RecyclerView.ViewHolder(itemView){
     val image = itemView.report_list_image
     val title = itemView.report_list_title
     val description = itemView.report_list_description
     val location = itemView.report_list_location
     val id = itemView.hidden_report_id
+    val deleteReport = itemView.btn_report_delete
+    val editReport = itemView.btn_report_edit
+    var reportData: ReportData? = null
+
 
     fun bind(reportData: ReportData){
+        this.reportData = reportData
         if(reportData.report.problem_picture != null){
             image.setImageBitmap(transformBlotIntoBitmap(reportData.report.problem_picture))
         }
@@ -67,7 +77,23 @@ class ReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
             //Opens ReportDescription Activity
             v.context.startActivity(intent)
         }
+        deleteReport.setOnClickListener{
+            reportInterface.deleteReportById(parseInt(id.text.toString()))
+        }
+        editReport.setOnClickListener{
+            val intent = Intent(it.context, CreateReportActivity::class.java)
+
+            intent.putExtra(SELECTED_REPORT, reportData!!.report.id)
+            intent.putExtra(REPORT_TITLE, reportData!!.report.report_title)
+            intent.putExtra(REPORT_DESCRIPTION, reportData!!.report.report_description)
+            intent.putExtra(REPORT_STREET, reportData!!.report.report_street)
+            intent.putExtra(REPORT_LOCATION, reportData!!.city.id)
+            intent.putExtra(REPORT_TYPE, reportData!!.type.id)
+
+            it.context.startActivity(intent)
+        }
     }
+
 
     private fun transformBlotIntoBitmap(image: Blob): Bitmap{
         val imageBytes = image.binaryStream

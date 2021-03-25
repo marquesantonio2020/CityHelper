@@ -1,8 +1,10 @@
 package ipvc.estg.cityhelper
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ipvc.estg.cityhelper.adapters.REPORT_ID
 import ipvc.estg.cityhelper.adapters.ReportListAdapter
 import ipvc.estg.cityhelper.api.ReportData
+import ipvc.estg.cityhelper.api.ServerResponse
 import ipvc.estg.cityhelper.api.endpoints.ReportEndPoint
 import ipvc.estg.cityhelper.api.servicebuilder.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_user_report_list.*
@@ -24,6 +27,18 @@ private lateinit var reportTitle: TextView
 private lateinit var reportDescription: TextView
 private lateinit var reportLocation: TextView
 private lateinit var reportCity: TextView
+private lateinit var reportType: TextView
+private lateinit var reportEdit: Button
+private lateinit var reportDelete: Button
+private var cityId: Int = 0
+private var typeId: Int = 0
+
+const val SELECTED_REPORT = "reportId"
+const val REPORT_TITLE = "title"
+const val REPORT_DESCRIPTION = "description"
+const val REPORT_STREET = "street"
+const val REPORT_LOCATION = "city"
+const val REPORT_TYPE = "type"
 
 class ReportDescriptionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +60,55 @@ class ReportDescriptionActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ReportData>, t: Throwable) {
-                Log.v("ReportHERE", "${t.message}")
+
                 Toast.makeText(this@ReportDescriptionActivity, "${t.message}", Toast.LENGTH_LONG).show()
             }
         })
+
+        /**Delete Report from report description*/
+        reportDelete = findViewById(R.id.report_description_delete)
+
+        reportDelete.setOnClickListener{
+            val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
+            val call = request.deleteReport(selectedReport)
+
+            call.enqueue(object : Callback<ServerResponse>{
+                override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>){
+                    if(response.isSuccessful){
+                        val serverResponse = response.body()!!
+                        if(serverResponse.status){
+                            Toast.makeText(this@ReportDescriptionActivity, R.string.report_deleted_success, Toast.LENGTH_LONG).show()
+                            finish()
+                        }else{
+                            Toast.makeText(this@ReportDescriptionActivity, R.string.report_deleted_unseccessfully, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                    Toast.makeText(this@ReportDescriptionActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+
+        }
+        /****************************************/
+
+        /**Edit Report - takes user to CreateReportActivity*/
+        reportEdit = findViewById(R.id.report_description_edit)
+
+        reportEdit.setOnClickListener{
+            val intent = Intent(this, CreateReportActivity::class.java)
+
+            intent.putExtra(SELECTED_REPORT, selectedReport)
+            intent.putExtra(REPORT_TITLE, reportTitle.text)
+            intent.putExtra(REPORT_DESCRIPTION, reportDescription.text)
+            intent.putExtra(REPORT_STREET, reportLocation.text)
+            intent.putExtra(REPORT_LOCATION, cityId)
+            intent.putExtra(REPORT_TYPE, typeId)
+
+            startActivity(intent)
+        }
+        /***************************************************/
     }
 
     private fun injectResponseData(reportData: ReportData){
@@ -58,6 +118,7 @@ class ReportDescriptionActivity : AppCompatActivity() {
         reportDescription = findViewById(R.id.report_description_text)
         reportLocation = findViewById(R.id.report_location)
         reportCity = findViewById(R.id.report_city)
+        reportType = findViewById(R.id.report_type_problem)
 
         if(reportData.report.problem_picture != null){
             //reportImage.setImageBitmap(reportData.report.problem_picture)
@@ -67,6 +128,10 @@ class ReportDescriptionActivity : AppCompatActivity() {
         reportDescription.text = reportData.report.report_description
         reportLocation.text = reportData.report.report_street
         reportCity.text = reportData.city.city_name
+        reportType.text = reportData.type.problem_description
+       cityId = reportData.city.id
+        typeId = reportData.type.id
 
     }
+
 }
