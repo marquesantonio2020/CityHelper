@@ -1,12 +1,21 @@
 package ipvc.estg.cityhelper
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextUtils
 import android.util.Log
 import android.widget.*
+import androidx.core.content.ContextCompat
 import ipvc.estg.cityhelper.api.*
 import ipvc.estg.cityhelper.api.endpoints.CountryCityEndpoint
 import ipvc.estg.cityhelper.api.endpoints.ReportEndPoint
@@ -17,16 +26,23 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 private lateinit var citySpinner: Spinner
 private lateinit var typeSpinner: Spinner
 private lateinit var titleInput: EditText
 private lateinit var streetInput: EditText
 private lateinit var descriptionInput: EditText
+private lateinit var pictureTaken: ImageView
+private lateinit var addPictureBtn: ImageButton
 private lateinit var createReport: Button
 private lateinit var typeResponse: List<Type>
 private lateinit var cityResponse: List<CountryCity>
+
+private const val REQUEST_CODE = 42
 
 class CreateReportActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +54,18 @@ class CreateReportActivity : AppCompatActivity() {
         citySpinner = findViewById(R.id.city_spinner)
         typeSpinner = findViewById(R.id.problem_spinner)
         descriptionInput = findViewById(R.id.report_create_description_input)
+        pictureTaken = findViewById(R.id.report_picture_taken)
+        addPictureBtn = findViewById(R.id.add_photo_btn)
+
+        addPictureBtn.setOnClickListener{
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            if(takePictureIntent.resolveActivity(this.packageManager) != null){
+                startActivityForResult(takePictureIntent, REQUEST_CODE)
+            }else{
+                Toast.makeText(this, "Unable to open camera", Toast.LENGTH_LONG).show()
+            }
+        }
 
         if(intent.getStringExtra(REPORT_TITLE).isNullOrEmpty()) {
             /**Preparing request to web service - Getting all Cities available *********/
@@ -133,7 +161,6 @@ class CreateReportActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<Type>>, t: Throwable) {
-                    Log.v("ReportHERE", "${t.message}")
                     Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
                         .show()
                 }
@@ -142,9 +169,12 @@ class CreateReportActivity : AppCompatActivity() {
             /********************************************/
             inflateDataIntoFields()
 
-            createReport.setOnClickListener{
-                createReport(false)
-            }
+
+                createReport.setOnClickListener{
+                    createReport(false)
+                }
+
+
 
 
 
@@ -186,6 +216,7 @@ class CreateReportActivity : AppCompatActivity() {
         descriptionInput.setText(intent.getStringExtra(REPORT_DESCRIPTION), TextView.BufferType.EDITABLE)
     }
 
+    @SuppressLint("NewApi")
     private fun createReport(isCreate: Boolean){
         val title = titleInput.text.toString()
         val description = descriptionInput.text.toString()
@@ -200,6 +231,15 @@ class CreateReportActivity : AppCompatActivity() {
         val selectedCity = cityResponse.get(city).id
         val selectedType = typeResponse.get(type).id
 
+        val bos = ByteArrayOutputStream()
+        val pic: Bitmap = (pictureTaken.drawable as BitmapDrawable).bitmap
+        pic.compress(Bitmap.CompressFormat.PNG, 100, bos)
+        val image = bos.toByteArray()
+        val encodedImage: String = Base64.getEncoder().encodeToString(bos.toByteArray())
+
+
+        Log.v("ReportHERE", "${image}")
+
         if(isCreate) {
             val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
             val call = request.newReport(
@@ -208,6 +248,7 @@ class CreateReportActivity : AppCompatActivity() {
                 2.2222,
                 2.2222,
                 local,
+                encodedImage,
                 userID,
                 selectedCity,
                 selectedType
@@ -252,6 +293,7 @@ class CreateReportActivity : AppCompatActivity() {
                 2.2222,
                 2.2222,
                 local,
+                encodedImage,
                 userID,
                 selectedCity,
                 selectedType,
@@ -290,6 +332,31 @@ class CreateReportActivity : AppCompatActivity() {
             })
 
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            val takenImage = data?.extras?.get("data") as Bitmap
+            pictureTaken.setImageBitmap(takenImage)
+        }else{
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+
+    }
+
+
+    private fun placeError(viewID: Int){
+        var targetView = findViewById<TextView>(viewID)
+
+        targetView.setTextColor(ContextCompat.getColor(this, R.color.errorTextColor))
+
+    }
+
+    private fun resetError(viewID: Int){
+        var targetView = findViewById<TextView>(viewID)
+
+        targetView.setTextColor(ContextCompat.getColor(this, R.color.defaultTextColor))
+
     }
 
 }

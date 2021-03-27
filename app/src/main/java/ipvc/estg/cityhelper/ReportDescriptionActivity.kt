@@ -1,8 +1,11 @@
 package ipvc.estg.cityhelper
 
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
@@ -20,6 +23,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
+import java.io.InputStream
+import java.net.URL
 
 private lateinit var reportImage: ImageView
 private lateinit var reportUser: TextView
@@ -120,9 +125,17 @@ class ReportDescriptionActivity : AppCompatActivity() {
         reportCity = findViewById(R.id.report_city)
         reportType = findViewById(R.id.report_type_problem)
 
-        if(reportData.report.problem_picture != null){
-            //reportImage.setImageBitmap(reportData.report.problem_picture)
+        if (Build.VERSION.SDK_INT > 9) {
+            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
         }
+        if(reportData.report.problem_picture != null){
+            var imageUrl = "https://cityhelpercommov.000webhostapp.com/COMMOV_APIS/uploads/" + reportData.report.problem_picture
+            var input: InputStream = URL(imageUrl).openStream()
+            var myBitmap = BitmapFactory.decodeStream(input)
+            reportImage.setImageBitmap(myBitmap)
+        }
+
         reportUser.text = "Created by: " + reportData.user
         reportTitle.text = reportData.report.report_title
         reportDescription.text = reportData.report.report_description

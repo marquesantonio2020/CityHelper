@@ -16,7 +16,7 @@ data class Report (
     val report_street: String,
     val report_location_latitude: Double,
     val report_location_longitude: Double,
-    val problem_picture: Blob,
+    val problem_picture: String,
     val report_isResolved: Int
 )
 

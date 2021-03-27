@@ -4,17 +4,19 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ipvc.estg.cityhelper.*
 import ipvc.estg.cityhelper.api.ReportData
 import kotlinx.android.synthetic.main.recycler_report_list_element.view.*
+import java.io.InputStream
 import java.lang.Integer.parseInt
+import java.net.URL
 import java.sql.Blob
-import java.util.*
 
 
 const val REPORT_ID = "reportId"
@@ -59,8 +61,15 @@ class ReportViewHolder(itemView: View, reportInterface: ReportListAdapter.Report
 
     fun bind(reportData: ReportData){
         this.reportData = reportData
+        if (Build.VERSION.SDK_INT > 9) {
+            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+        }
         if(reportData.report.problem_picture != null){
-            image.setImageBitmap(transformBlotIntoBitmap(reportData.report.problem_picture))
+            var imageUrl = "https://cityhelpercommov.000webhostapp.com/COMMOV_APIS/uploads/" + reportData.report.problem_picture
+            var input: InputStream = URL(imageUrl).openStream()
+            var myBitmap = BitmapFactory.decodeStream(input)
+            image.setImageBitmap(myBitmap)
         }
         title.text = reportData.report.report_title
         description.text = reportData.report.report_description

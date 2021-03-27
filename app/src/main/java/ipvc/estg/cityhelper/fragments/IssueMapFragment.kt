@@ -1,5 +1,7 @@
 package ipvc.estg.cityhelper.fragments
 
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,7 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -28,8 +33,10 @@ import retrofit2.Response
 
 private lateinit var gMap: GoogleMap
 private lateinit var allReports: List<ReportData>
+private lateinit var lastLocation: Location
+private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-
+const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 class IssueMapFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +47,9 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback {
         //Obtaining the SupportMApFragment and get notified when the map is ready to be used
         val frag = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         frag.getMapAsync(this)
+
+        //Initialize fusedLocationClient
+        //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.context!!)
 
         /**Preparing request to web service - Getting all reports on database to place on de map *********/
         val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
@@ -72,12 +82,32 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
+        //setUpMap()
         gMap = googleMap!!
 //LATER CHANGE THIS SO IT STARTS ON A CITY GOTTEN FROM SHARED PREFS
         //Add Marker in Sydney
         val porto = LatLng(41.16418946929581, -8.628822176948432)
         gMap.addMarker(MarkerOptions().position(porto).title("Sydney"))
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(porto, 10.0f))
+    }
+
+    private fun setUpMap(){
+        if(ActivityCompat.checkSelfPermission(this.context!!, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this.activity!!, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+
+            return
+        }else{
+            gMap.isMyLocationEnabled = true
+
+            fusedLocationClient.lastLocation.addOnSuccessListener(this.activity!!) {
+                location ->
+                if(location != null){
+                    lastLocation = location
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 10f))
+                }
+            }
+        }
     }
 
     companion object {

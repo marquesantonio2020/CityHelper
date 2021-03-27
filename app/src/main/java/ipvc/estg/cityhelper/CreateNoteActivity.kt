@@ -39,7 +39,6 @@ class CreateNoteActivity : AppCompatActivity() {
             finish()
         }
 
-        Toast.makeText(this, "${intent.getStringExtra(SENDING_DESCRIPTION)}", Toast.LENGTH_LONG).show()
         if(intent.getStringExtra(SENDING_TITLE).isNullOrEmpty()){
             createBtn.setOnClickListener{
                 val replyIntent = Intent()

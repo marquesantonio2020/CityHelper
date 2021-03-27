@@ -22,6 +22,7 @@ interface ReportEndPoint {
                   @Field("report_lat") lat: Double?,
                   @Field("report_long") long: Double?,
                   @Field("report_street") street: String,
+                  @Field("picture") picture: String,
                   @Field("userId") userId: Int,
                   @Field("cityId") cityId: Int,
                   @Field("typeId") typeId: Int): Call<ServerResponse>
@@ -33,6 +34,7 @@ interface ReportEndPoint {
                   @Field("report_lat") lat: Double?,
                   @Field("report_long") long: Double?,
                   @Field("report_street") street: String,
+                  @Field("picture") picture: String,
                   @Field("userId") userId: Int,
                   @Field("cityId") cityId: Int,
                   @Field("typeId") typeId: Int,
