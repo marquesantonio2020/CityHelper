@@ -23,6 +23,7 @@ import ipvc.estg.cityhelper.api.endpoints.TypeEndPoint
 import ipvc.estg.cityhelper.api.servicebuilder.ServiceBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,6 +42,9 @@ private lateinit var addPictureBtn: ImageButton
 private lateinit var createReport: Button
 private lateinit var typeResponse: List<Type>
 private lateinit var cityResponse: List<CountryCity>
+private lateinit var titleTitle: TextView
+private lateinit var descriptionTitle: TextView
+private lateinit var streetTitle: TextView
 
 private const val REQUEST_CODE = 42
 
@@ -56,6 +60,10 @@ class CreateReportActivity : AppCompatActivity() {
         descriptionInput = findViewById(R.id.report_create_description_input)
         pictureTaken = findViewById(R.id.report_picture_taken)
         addPictureBtn = findViewById(R.id.add_photo_btn)
+
+        titleTitle = findViewById(R.id.report_create_title)
+        descriptionTitle = findViewById(R.id.report_create_description)
+        streetTitle = findViewById(R.id.report_create_location)
 
         addPictureBtn.setOnClickListener{
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -234,104 +242,110 @@ class CreateReportActivity : AppCompatActivity() {
         val bos = ByteArrayOutputStream()
         val pic: Bitmap = (pictureTaken.drawable as BitmapDrawable).bitmap
         pic.compress(Bitmap.CompressFormat.PNG, 100, bos)
-        val image = bos.toByteArray()
         val encodedImage: String = Base64.getEncoder().encodeToString(bos.toByteArray())
 
-
-        Log.v("ReportHERE", "${image}")
-
-        if(isCreate) {
-            val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
-            val call = request.newReport(
-                title,
-                description,
-                2.2222,
-                2.2222,
-                local,
-                encodedImage,
-                userID,
-                selectedCity,
-                selectedType
-            )
-
-            call.enqueue(object : Callback<ServerResponse> {
-                override fun onResponse(
-                    call: Call<ServerResponse>,
-                    response: Response<ServerResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val insertCompleted = response.body()!!
-
-                        if (insertCompleted.status) {
-                            Toast.makeText(
-                                this@CreateReportActivity,
-                                R.string.report_create_success,
-                                Toast.LENGTH_LONG
-                            ).show()
-                            finish()
-                        } else {
-                            Toast.makeText(
-                                this@CreateReportActivity,
-                                R.string.report_create_unsuccess,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
-                    Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
+        if(TextUtils.isEmpty(titleInput.text) || TextUtils.isEmpty(descriptionInput.text) || TextUtils.isEmpty(
+                streetInput.text)){
+            checkIfEmpty(titleInput, titleTitle)
+            checkIfEmpty(descriptionInput, descriptionTitle)
+            checkIfEmpty(streetInput, streetTitle)
+            Toast.makeText(this, R.string.missing_fields, Toast.LENGTH_LONG).show()
         }else{
-            val reportId = intent.getIntExtra(SELECTED_REPORT, -1)
-            val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
-            val call = request.updateReport(
-                title,
-                description,
-                2.2222,
-                2.2222,
-                local,
-                encodedImage,
-                userID,
-                selectedCity,
-                selectedType,
-                reportId
-            )
+            if(isCreate) {
+                val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
+                val call = request.newReport(
+                    title,
+                    description,
+                    2.2222,
+                    2.2222,
+                    local,
+                    encodedImage,
+                    userID,
+                    selectedCity,
+                    selectedType
+                )
 
-            call.enqueue(object : Callback<ServerResponse> {
-                override fun onResponse(
-                    call: Call<ServerResponse>,
-                    response: Response<ServerResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val insertCompleted = response.body()!!
+                call.enqueue(object : Callback<ServerResponse> {
+                    override fun onResponse(
+                        call: Call<ServerResponse>,
+                        response: Response<ServerResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val insertCompleted = response.body()!!
 
-                        if (insertCompleted.status) {
-                            Toast.makeText(
-                                this@CreateReportActivity,
-                                R.string.report_edit_success,
-                                Toast.LENGTH_LONG
-                            ).show()
-                            finish()
-                        } else {
-                            Toast.makeText(
-                                this@CreateReportActivity,
-                                R.string.report_edit_unsuccess,
-                                Toast.LENGTH_LONG
-                            ).show()
+                            if (insertCompleted.status) {
+                                Toast.makeText(
+                                    this@CreateReportActivity,
+                                    R.string.report_create_success,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                finish()
+                            } else {
+                                Toast.makeText(
+                                    this@CreateReportActivity,
+                                    R.string.report_create_unsuccess,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
                     }
-                }
 
-                override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
-                    Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
+                    override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                        Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                })
+            }else{
+                val reportId = intent.getIntExtra(SELECTED_REPORT, -1)
+                val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
+                val call = request.updateReport(
+                    title,
+                    description,
+                    2.2222,
+                    2.2222,
+                    local,
+                    encodedImage,
+                    userID,
+                    selectedCity,
+                    selectedType,
+                    reportId
+                )
 
+                call.enqueue(object : Callback<ServerResponse> {
+                    override fun onResponse(
+                        call: Call<ServerResponse>,
+                        response: Response<ServerResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val insertCompleted = response.body()!!
+
+                            if (insertCompleted.status) {
+                                Toast.makeText(
+                                    this@CreateReportActivity,
+                                    R.string.report_edit_success,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                finish()
+                            } else {
+                                Toast.makeText(
+                                    this@CreateReportActivity,
+                                    R.string.report_edit_unsuccess,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                        Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                })
+
+            }
         }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -342,6 +356,14 @@ class CreateReportActivity : AppCompatActivity() {
             super.onActivityResult(requestCode, resultCode, data)
         }
 
+    }
+
+    private fun checkIfEmpty(input: TextView, title: TextView){
+        if(TextUtils.isEmpty(input.text)){
+            placeError(title.id)
+        }else{
+            resetError(title.id)
+        }
     }
 
 
