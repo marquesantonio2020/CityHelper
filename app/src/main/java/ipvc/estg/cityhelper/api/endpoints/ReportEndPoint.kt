@@ -31,8 +31,6 @@ interface ReportEndPoint {
     @POST("/COMMOV_APIS/index.php/api/report/update_report")
     fun updateReport(@Field("title") title: String?,
                   @Field("description") description: String?,
-                  @Field("report_lat") lat: Double?,
-                  @Field("report_long") long: Double?,
                   @Field("report_street") street: String,
                   @Field("picture") picture: String,
                   @Field("userId") userId: Int,

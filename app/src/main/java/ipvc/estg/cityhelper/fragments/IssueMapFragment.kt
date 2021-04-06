@@ -1,6 +1,8 @@
 package ipvc.estg.cityhelper.fragments
 
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -16,10 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import ipvc.estg.cityhelper.R
 import ipvc.estg.cityhelper.adapters.ReportListAdapter
 import ipvc.estg.cityhelper.api.ReportData
@@ -29,6 +28,8 @@ import kotlinx.android.synthetic.main.activity_user_report_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.InputStream
+import java.net.URL
 
 private lateinit var gMap: GoogleMap
 private lateinit var allReports: List<ReportData>
@@ -82,10 +83,11 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback {
                     allReports = response.body()!!
 
                     for(report in allReports){
+                        var myBitmap: Bitmap
                         markerPosition = LatLng(report.report.report_location_latitude, report.report.report_location_longitude)
 
-                        gMap.addMarker(MarkerOptions().position(markerPosition).title(report.report.report_title))
-                            .setIcon(BitmapDescriptorFactory.defaultMarker(report.type.problem_color))
+                            gMap.addMarker(MarkerOptions().position(markerPosition).title(report.report.report_title).snippet("Created by: " + report.user)).setIcon(BitmapDescriptorFactory.defaultMarker(report.type.problem_color))
+
                     }
                 }
             }
@@ -103,11 +105,6 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap?) {
         gMap = googleMap!!
         setUpMap()
-//LATER CHANGE THIS SO IT STARTS ON A CITY GOTTEN FROM SHARED PREFS
-        //Add Marker in Sydney
-        /**val porto = LatLng(41.16418946929581, -8.628822176948432)
-        gMap.addMarker(MarkerOptions().position(porto).title("Porto"))
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(porto, 10.0f))*/
     }
 
     private fun setUpMap(){

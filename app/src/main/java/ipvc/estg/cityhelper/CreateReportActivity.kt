@@ -5,8 +5,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -15,7 +17,10 @@ import android.text.Editable
 import android.text.TextUtils
 import android.util.Log
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import ipvc.estg.cityhelper.api.*
 import ipvc.estg.cityhelper.api.endpoints.CountryCityEndpoint
 import ipvc.estg.cityhelper.api.endpoints.ReportEndPoint
@@ -47,11 +52,42 @@ private lateinit var descriptionTitle: TextView
 private lateinit var streetTitle: TextView
 
 private const val REQUEST_CODE = 42
+const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+var once: Boolean = false
+
+//Variables for last known location
+private lateinit var lastLocation: Location
+private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+//Variables to implement periodic updates on user's location
+private lateinit var locationCallback: LocationCallback
+private lateinit var locationRequest: LocationRequest
 
 class CreateReportActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_report)
+
+        /**Obtaining user current location to save to database
+         * when creating a report
+         * **/
+        //Initialize fusedLocationClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        createLocationRequest()
+
+        //Callback added for periodic location updates
+        locationCallback = object: LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+                //Last location will have the updated value of user's location
+                lastLocation = p0.lastLocation
+                if(!once){
+                    once = true
+                }
+            }
+        }
+
+        /****************************************************/
 
         titleInput = findViewById(R.id.report_create_title_input)
         streetInput = findViewById(R.id.report_create_location_input)
@@ -256,8 +292,8 @@ class CreateReportActivity : AppCompatActivity() {
                 val call = request.newReport(
                     title,
                     description,
-                    2.2222,
-                    2.2222,
+                    lastLocation.latitude,
+                    lastLocation.longitude,
                     local,
                     encodedImage,
                     userID,
@@ -301,8 +337,6 @@ class CreateReportActivity : AppCompatActivity() {
                 val call = request.updateReport(
                     title,
                     description,
-                    2.2222,
-                    2.2222,
                     local,
                     encodedImage,
                     userID,
@@ -379,6 +413,48 @@ class CreateReportActivity : AppCompatActivity() {
 
         targetView.setTextColor(ContextCompat.getColor(this, R.color.defaultTextColor))
 
+    }
+
+    private fun setUpMap(){
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+
+            return
+        }else{
+
+            fusedLocationClient.lastLocation.addOnSuccessListener(this) {
+                    location ->
+                if(location != null){
+                    lastLocation = location
+                }
+            }
+        }
+    }
+
+    private fun startLocationUpdates(){
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun createLocationRequest(){
+        locationRequest = LocationRequest()
+
+        //Specify the interval rate when the update must to be receive
+        locationRequest.interval = 6000 //ms
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startLocationUpdates()
     }
 
 }
