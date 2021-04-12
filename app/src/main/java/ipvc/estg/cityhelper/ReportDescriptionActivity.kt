@@ -35,6 +35,7 @@ private lateinit var reportCity: TextView
 private lateinit var reportType: TextView
 private lateinit var reportEdit: Button
 private lateinit var reportDelete: Button
+private lateinit var imgString: String
 private var cityId: Int = 0
 private var typeId: Int = 0
 
@@ -44,6 +45,7 @@ const val REPORT_DESCRIPTION = "description"
 const val REPORT_STREET = "street"
 const val REPORT_LOCATION = "city"
 const val REPORT_TYPE = "type"
+const val REPORT_IMAGE = "image"
 
 class ReportDescriptionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,48 +54,14 @@ class ReportDescriptionActivity : AppCompatActivity() {
 
         var selectedReport = intent.getIntExtra(REPORT_ID, 0)
 
-
-        val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
-        val call = request.getSingleReport(selectedReport)
-
-        call.enqueue(object : Callback<ReportData> {
-            override fun onResponse(call: Call<ReportData>, response: Response<ReportData>){
-                Toast.makeText(this@ReportDescriptionActivity, "${response}", Toast.LENGTH_SHORT).show()
-                if(response.isSuccessful){
-                    injectResponseData(response.body()!!)
-                }
-            }
-
-            override fun onFailure(call: Call<ReportData>, t: Throwable) {
-
-                Toast.makeText(this@ReportDescriptionActivity, "${t.message}", Toast.LENGTH_LONG).show()
-            }
-        })
+        fetchSingleReport(selectedReport)
 
         /**Delete Report from report description*/
         reportDelete = findViewById(R.id.report_description_delete)
 
         reportDelete.setOnClickListener{
-            val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
-            val call = request.deleteReport(selectedReport)
-
-            call.enqueue(object : Callback<ServerResponse>{
-                override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>){
-                    if(response.isSuccessful){
-                        val serverResponse = response.body()!!
-                        if(serverResponse.status){
-                            Toast.makeText(this@ReportDescriptionActivity, R.string.report_deleted_success, Toast.LENGTH_LONG).show()
-                            finish()
-                        }else{
-                            Toast.makeText(this@ReportDescriptionActivity, R.string.report_deleted_unseccessfully, Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
-                    Toast.makeText(this@ReportDescriptionActivity, "${t.message}", Toast.LENGTH_LONG).show()
-                }
-            })
+            deleteReport(selectedReport)
+            finish()
 
         }
         /****************************************/
@@ -110,6 +78,7 @@ class ReportDescriptionActivity : AppCompatActivity() {
             intent.putExtra(REPORT_STREET, reportLocation.text)
             intent.putExtra(REPORT_LOCATION, cityId)
             intent.putExtra(REPORT_TYPE, typeId)
+            intent.putExtra(REPORT_IMAGE, imgString)
 
             startActivity(intent)
         }
@@ -130,6 +99,7 @@ class ReportDescriptionActivity : AppCompatActivity() {
             StrictMode.setThreadPolicy(policy)
         }
         if(reportData.report.problem_picture != null){
+            imgString = reportData.report.problem_picture
             var imageUrl = "https://cityhelpercommov.000webhostapp.com/COMMOV_APIS/uploads/" + reportData.report.problem_picture
             var input: InputStream = URL(imageUrl).openStream()
             var myBitmap = BitmapFactory.decodeStream(input)
@@ -145,6 +115,55 @@ class ReportDescriptionActivity : AppCompatActivity() {
        cityId = reportData.city.id
         typeId = reportData.type.id
 
+    }
+
+    private fun fetchSingleReport(selectedReport: Int){
+        val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
+        val call = request.getSingleReport(selectedReport)
+
+        call.enqueue(object : Callback<ReportData> {
+            override fun onResponse(call: Call<ReportData>, response: Response<ReportData>){
+                Toast.makeText(this@ReportDescriptionActivity, "${response}", Toast.LENGTH_SHORT).show()
+                if(response.isSuccessful){
+                    injectResponseData(response.body()!!)
+                }
+            }
+
+            override fun onFailure(call: Call<ReportData>, t: Throwable) {
+
+                fetchSingleReport(selectedReport)
+            }
+        })
+
+    }
+
+    private fun deleteReport(selectedReport: Int){
+        val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
+        val call = request.deleteReport(selectedReport)
+
+        call.enqueue(object : Callback<ServerResponse>{
+            override fun onResponse(call: Call<ServerResponse>, response: Response<ServerResponse>){
+                if(response.isSuccessful){
+                    val serverResponse = response.body()!!
+                    if(serverResponse.status){
+                        Toast.makeText(this@ReportDescriptionActivity, R.string.report_deleted_success, Toast.LENGTH_LONG).show()
+                        finish()
+                    }else{
+                        Toast.makeText(this@ReportDescriptionActivity, R.string.report_deleted_unseccessfully, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                deleteReport(selectedReport)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        var selectedReport = intent.getIntExtra(REPORT_ID, 0)
+        fetchSingleReport(selectedReport)
     }
 
 }

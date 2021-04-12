@@ -4,7 +4,9 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -82,11 +84,19 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback {
                 if(response.isSuccessful){
                     allReports = response.body()!!
 
+                    if (Build.VERSION.SDK_INT > 9) {
+                        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+                        StrictMode.setThreadPolicy(policy)
+                    }
+
                     for(report in allReports){
                         var myBitmap: Bitmap
+                        var imageUrl = "https://cityhelpercommov.000webhostapp.com/COMMOV_APIS/uploads/" + report.report.problem_picture
+                        var input: InputStream = URL(imageUrl).openStream()
+                        myBitmap = BitmapFactory.decodeStream(input)
                         markerPosition = LatLng(report.report.report_location_latitude, report.report.report_location_longitude)
 
-                            gMap.addMarker(MarkerOptions().position(markerPosition).title(report.report.report_title).snippet("Created by: " + report.user)).setIcon(BitmapDescriptorFactory.defaultMarker(report.type.problem_color))
+                            gMap.addMarker(MarkerOptions().position(markerPosition).title(report.report.report_title).snippet("Created by: " + report.user).icon(BitmapDescriptorFactory.fromBitmap(myBitmap))).setIcon(BitmapDescriptorFactory.defaultMarker(report.type.problem_color))
 
                     }
                 }

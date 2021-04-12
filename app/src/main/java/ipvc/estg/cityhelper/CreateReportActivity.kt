@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.net.URL
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -111,51 +114,11 @@ class CreateReportActivity : AppCompatActivity() {
             }
         }
 
+
+
         if(intent.getStringExtra(REPORT_TITLE).isNullOrEmpty()) {
-            /**Preparing request to web service - Getting all Cities available *********/
-            val request = ServiceBuilder.buildService(CountryCityEndpoint::class.java)
-            val call = request.getAllCities()
-
-            call.enqueue(object : Callback<List<CountryCity>> {
-                override fun onResponse(
-                    call: Call<List<CountryCity>>,
-                    response: Response<List<CountryCity>>
-                ) {
-                    if (response.isSuccessful) {
-                        cityResponse = response.body()!!
-                        inflateDataIntoSpinnerCities(response.body()!!)
-                    }
-                }
-
-                override fun onFailure(call: Call<List<CountryCity>>, t: Throwable) {
-                    Log.v("ReportHERE", "${t.message}")
-                    Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
-
-            /********************************************/
-
-            /**Preparing request to web service - Getting all Types of problems available *********/
-            val requestTypes = ServiceBuilder.buildService(TypeEndPoint::class.java)
-            val callTypes = requestTypes.getTypesProblems()
-
-            callTypes.enqueue(object : Callback<List<Type>> {
-                override fun onResponse(call: Call<List<Type>>, response: Response<List<Type>>) {
-                    if (response.isSuccessful) {
-                        typeResponse = response.body()!!
-                        inflateDataIntoSpinnerTypes(response.body()!!)
-                    }
-                }
-
-                override fun onFailure(call: Call<List<Type>>, t: Throwable) {
-                    Log.v("ReportHERE", "${t.message}")
-                    Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
-
-            /********************************************/
+            fetchCities()
+            fetchTypes()
 
             /**Report Creation Method **********************/
             createReport = findViewById(R.id.report_create_btn)
@@ -168,49 +131,8 @@ class CreateReportActivity : AppCompatActivity() {
             createReport = findViewById(R.id.report_create_btn)
             createReport.setText(R.string.btn_edit)
 
-            /**Preparing request to web service - Getting all Cities available *********/
-            val request = ServiceBuilder.buildService(CountryCityEndpoint::class.java)
-            val call = request.getAllCities()
-
-            call.enqueue(object : Callback<List<CountryCity>> {
-                override fun onResponse(
-                    call: Call<List<CountryCity>>,
-                    response: Response<List<CountryCity>>
-                ) {
-                    if (response.isSuccessful) {
-                        cityResponse = response.body()!!
-                        inflateDataIntoSpinnerCities(response.body()!!)
-                    }
-                }
-
-                override fun onFailure(call: Call<List<CountryCity>>, t: Throwable) {
-                    Log.v("ReportHERE", "${t.message}")
-                    Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
-
-            /********************************************/
-
-            /**Preparing request to web service - Getting all Types of problems available *********/
-            val requestTypes = ServiceBuilder.buildService(TypeEndPoint::class.java)
-            val callTypes = requestTypes.getTypesProblems()
-
-            callTypes.enqueue(object : Callback<List<Type>> {
-                override fun onResponse(call: Call<List<Type>>, response: Response<List<Type>>) {
-                    if (response.isSuccessful) {
-                        typeResponse = response.body()!!
-                        inflateDataIntoSpinnerTypes(response.body()!!)
-                    }
-                }
-
-                override fun onFailure(call: Call<List<Type>>, t: Throwable) {
-                    Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
-
-            /********************************************/
+            fetchCities()
+            fetchTypes()
             inflateDataIntoFields()
 
 
@@ -258,6 +180,13 @@ class CreateReportActivity : AppCompatActivity() {
         titleInput.setText(intent.getStringExtra(REPORT_TITLE), TextView.BufferType.EDITABLE)
         streetInput.setText(intent.getStringExtra(REPORT_STREET), TextView.BufferType.EDITABLE)
         descriptionInput.setText(intent.getStringExtra(REPORT_DESCRIPTION), TextView.BufferType.EDITABLE)
+
+        if(intent.getStringExtra(REPORT_IMAGE) != null){
+            var imageUrl = "https://cityhelpercommov.000webhostapp.com/COMMOV_APIS/uploads/" + intent.getStringExtra(REPORT_IMAGE)
+            var input: InputStream = URL(imageUrl).openStream()
+            var myBitmap = BitmapFactory.decodeStream(input)
+            pictureTaken.setImageBitmap(myBitmap)
+        }
     }
 
     @SuppressLint("NewApi")
@@ -288,9 +217,7 @@ class CreateReportActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.missing_fields, Toast.LENGTH_LONG).show()
         }else{
             if(isCreate) {
-                val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
-                val call = request.newReport(
-                    title,
+                createReport(title,
                     description,
                     lastLocation.latitude,
                     lastLocation.longitude,
@@ -298,84 +225,17 @@ class CreateReportActivity : AppCompatActivity() {
                     encodedImage,
                     userID,
                     selectedCity,
-                    selectedType
-                )
+                    selectedType)
 
-                call.enqueue(object : Callback<ServerResponse> {
-                    override fun onResponse(
-                        call: Call<ServerResponse>,
-                        response: Response<ServerResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val insertCompleted = response.body()!!
-
-                            if (insertCompleted.status) {
-                                Toast.makeText(
-                                    this@CreateReportActivity,
-                                    R.string.report_create_success,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                finish()
-                            } else {
-                                Toast.makeText(
-                                    this@CreateReportActivity,
-                                    R.string.report_create_unsuccess,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
-                        Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                            .show()
-                    }
-                })
             }else{
-                val reportId = intent.getIntExtra(SELECTED_REPORT, -1)
-                val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
-                val call = request.updateReport(
-                    title,
+
+                editReport(title,
                     description,
                     local,
                     encodedImage,
                     userID,
                     selectedCity,
-                    selectedType,
-                    reportId
-                )
-
-                call.enqueue(object : Callback<ServerResponse> {
-                    override fun onResponse(
-                        call: Call<ServerResponse>,
-                        response: Response<ServerResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val insertCompleted = response.body()!!
-
-                            if (insertCompleted.status) {
-                                Toast.makeText(
-                                    this@CreateReportActivity,
-                                    R.string.report_edit_success,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                finish()
-                            } else {
-                                Toast.makeText(
-                                    this@CreateReportActivity,
-                                    R.string.report_edit_unsuccess,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
-                        Toast.makeText(this@CreateReportActivity, "${t.message}", Toast.LENGTH_LONG)
-                            .show()
-                    }
-                })
-
+                    selectedType)
             }
         }
 
@@ -389,6 +249,175 @@ class CreateReportActivity : AppCompatActivity() {
         }else{
             super.onActivityResult(requestCode, resultCode, data)
         }
+
+    }
+
+    private fun fetchCities(){
+        /**Preparing request to web service - Getting all Cities available *********/
+        val request = ServiceBuilder.buildService(CountryCityEndpoint::class.java)
+        val call = request.getAllCities()
+
+        call.enqueue(object : Callback<List<CountryCity>> {
+            override fun onResponse(
+                call: Call<List<CountryCity>>,
+                response: Response<List<CountryCity>>
+            ) {
+                if (response.isSuccessful) {
+                    cityResponse = response.body()!!
+                    inflateDataIntoSpinnerCities(response.body()!!)
+                }
+            }
+
+            override fun onFailure(call: Call<List<CountryCity>>, t: Throwable) {
+                Log.v("ReportHERE", "${t.message}")
+                fetchCities()
+            }
+        })
+
+        /********************************************/
+
+
+    }
+    private fun createReport(title: String,
+                             description: String,
+                             latitude: Double,
+    longitude: Double,
+    local: String,
+    encodedImage: String,
+    userID: Int,
+    selectedCity: Int,
+    selectedType: Int){
+        val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
+        val call = request.newReport(
+            title,
+            description,
+            latitude,
+            longitude,
+            local,
+            encodedImage,
+            userID,
+            selectedCity,
+            selectedType
+        )
+
+        call.enqueue(object : Callback<ServerResponse> {
+            override fun onResponse(
+                call: Call<ServerResponse>,
+                response: Response<ServerResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val insertCompleted = response.body()!!
+
+                    if (insertCompleted.status) {
+                        Toast.makeText(
+                            this@CreateReportActivity,
+                            R.string.report_create_success,
+                            Toast.LENGTH_LONG
+                        ).show()
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this@CreateReportActivity,
+                            R.string.report_create_unsuccess,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                createReport(title,
+                    description,
+                    latitude,
+                    longitude,
+                    local,
+                    encodedImage,
+                    userID,
+                    selectedCity,
+                    selectedType)
+            }
+        })
+    }
+
+    private fun editReport(title: String,
+                             description: String,
+                             local: String,
+                             encodedImage: String,
+                             userID: Int,
+                             selectedCity: Int,
+                             selectedType: Int){
+        val reportId = intent.getIntExtra(SELECTED_REPORT, -1)
+        val request = ServiceBuilder.buildService(ReportEndPoint::class.java)
+        val call = request.updateReport(
+            title,
+            description,
+            local,
+            encodedImage,
+            userID,
+            selectedCity,
+            selectedType,
+            reportId
+        )
+
+        call.enqueue(object : Callback<ServerResponse> {
+            override fun onResponse(
+                call: Call<ServerResponse>,
+                response: Response<ServerResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val insertCompleted = response.body()!!
+
+                    if (insertCompleted.status) {
+                        Toast.makeText(
+                            this@CreateReportActivity,
+                            R.string.report_edit_success,
+                            Toast.LENGTH_LONG
+                        ).show()
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this@CreateReportActivity,
+                            R.string.report_edit_unsuccess,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ServerResponse>, t: Throwable) {
+                editReport(title,
+                    description,
+                    local,
+                    encodedImage,
+                    userID,
+                    selectedCity,
+                    selectedType)
+            }
+        })
+
+    }
+
+    private fun fetchTypes(){
+        /**Preparing request to web service - Getting all Types of problems available *********/
+        val requestTypes = ServiceBuilder.buildService(TypeEndPoint::class.java)
+        val callTypes = requestTypes.getTypesProblems()
+
+        callTypes.enqueue(object : Callback<List<Type>> {
+            override fun onResponse(call: Call<List<Type>>, response: Response<List<Type>>) {
+                if (response.isSuccessful) {
+                    typeResponse = response.body()!!
+                    inflateDataIntoSpinnerTypes(response.body()!!)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Type>>, t: Throwable) {
+                Log.v("ReportHERE", "${t.message}")
+                fetchTypes()
+            }
+        })
+
+        /********************************************/
+
 
     }
 

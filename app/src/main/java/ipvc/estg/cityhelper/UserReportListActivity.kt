@@ -32,6 +32,30 @@ class UserReportListActivity : AppCompatActivity(), ReportListAdapter.ReportElem
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setTitle(R.string.reports)
 
+        fetchUsersReport()
+
+
+        /**Floating button action *********/
+
+        addReportBtn = findViewById(R.id.btn_addReport)
+
+        addReportBtn.setOnClickListener{view ->
+            val intent = Intent(this, CreateReportActivity::class.java)
+
+            startActivity(intent)
+        }
+
+        /**********************************/
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra(INTENT_PARAM, "reports")
+        }
+        startActivity(intent)
+    }
+
+    private fun fetchUsersReport(){
         /**Getting User Id Saved on SharedPreferences*/
         val sharedPreferences: SharedPreferences = getSharedPreferences(getString(R.string.logindata), Context.MODE_PRIVATE)
 
@@ -55,30 +79,12 @@ class UserReportListActivity : AppCompatActivity(), ReportListAdapter.ReportElem
 
             override fun onFailure(call: Call<List<ReportData>>, t: Throwable) {
                 Log.v("ReportHERE", "${t.message}")
-                Toast.makeText(this@UserReportListActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                fetchUsersReport()
             }
         })
 
         /********************************************/
 
-        /**Floating button action *********/
-
-        addReportBtn = findViewById(R.id.btn_addReport)
-
-        addReportBtn.setOnClickListener{view ->
-            val intent = Intent(this, CreateReportActivity::class.java)
-
-            startActivity(intent)
-        }
-
-        /**********************************/
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra(INTENT_PARAM, "reports")
-        }
-        startActivity(intent)
     }
 
     override fun deleteReportById(id: Int) {
@@ -109,6 +115,11 @@ class UserReportListActivity : AppCompatActivity(), ReportListAdapter.ReportElem
 
     override fun editReportById(id: Int) {
         TODO("Not yet implemented")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchUsersReport()
     }
 }
 
