@@ -66,5 +66,17 @@
     <string name="report_edit_success">Denúncia editada com sucesso</string>
     <string name="report_edit_unsuccess">Não foi possível editar a sua denúncia</string>
 
+    <!--String para os botões e texto no map fragment-->
+    <string name="filter_cyan_markers">Infraestruturas</string>
+    <string name="filter_yellow_markers">Sinalização</string>
+    <string name="filter_green_markers">Saneamento</string>
+    <string name="refresh">Recarregar</string>
+    <string name="distance100m">100m</string>
+    <string name="distance500m">500m</string>
+    <string name="distance1000m">1Km</string>
+    <string name="distance2000m">2Km</string>
+    <string name="filter_text">Filtros</string>
+    <string name="distance_text">Distância</string>
+
 
 </resources>
