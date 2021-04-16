@@ -69,7 +69,7 @@ private lateinit var distance2000m: Button
 
 const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 var once: Boolean = false
-class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener /*, GoogleMap.OnInfoWindowClickListener*/ {
+class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, GoogleMap.OnInfoWindowClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -136,17 +136,17 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener /*
     override fun onMapReady(googleMap: GoogleMap?) {
         gMap = googleMap!!
         setUpMap()
-        //gMap.setOnInfoWindowClickListener(this)
+        gMap.setOnInfoWindowClickListener(this)
     }
 
-    /*override fun onInfoWindowClick(selectedMarker: Marker) {
+    override fun onInfoWindowClick(selectedMarker: Marker) {
         val reportId = markersHashId.get(selectedMarker)
 
         val intent = Intent(this.context, ReportDescriptionActivity::class.java).apply {
             putExtra(REPORT_ID, reportId)
         }
         startActivity(intent)
-    }*/
+    }
 
     private fun setUpMap(){
         if(ActivityCompat.checkSelfPermission(this.context!!, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
