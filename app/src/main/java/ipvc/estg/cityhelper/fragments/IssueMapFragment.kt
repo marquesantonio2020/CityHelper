@@ -31,6 +31,7 @@ import ipvc.estg.cityhelper.adapters.ReportListAdapter
 import ipvc.estg.cityhelper.api.ReportData
 import ipvc.estg.cityhelper.api.endpoints.ReportEndPoint
 import ipvc.estg.cityhelper.api.servicebuilder.ServiceBuilder
+import ipvc.estg.cityhelper.map.CustomInfoWindowForGoogleMap
 import kotlinx.android.synthetic.main.activity_user_report_list.*
 import org.w3c.dom.Text
 import retrofit2.Call
@@ -44,6 +45,7 @@ private lateinit var allReports: List<ReportData>
 private var markers: ArrayList<Marker> = ArrayList()
 private lateinit var markersHashType: HashMap<Marker, String>
 private lateinit var markersHashId: HashMap<Marker, Int>
+private lateinit var markersHashImage: HashMap<String, Bitmap>
 
 //Variables for last known location
 private lateinit var lastLocation: Location
@@ -136,6 +138,8 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
     override fun onMapReady(googleMap: GoogleMap?) {
         gMap = googleMap!!
         setUpMap()
+        markersHashImage = HashMap()
+        gMap.setInfoWindowAdapter(CustomInfoWindowForGoogleMap(this.context!!, markersHashImage))
         gMap.setOnInfoWindowClickListener(this)
     }
 
@@ -216,6 +220,7 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
                 markers = ArrayList<Marker>()
                 markersHashType = HashMap()
                 markersHashId = HashMap()
+
                 if(response.isSuccessful){
                     allReports = response.body()!!
 
@@ -228,24 +233,25 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
                         var myBitmap: Bitmap
                         var imageUrl =
                             "https://cityhelpercommov.000webhostapp.com/COMMOV_APIS/uploads/" + report.report.problem_picture
+
                         var input: InputStream = URL(imageUrl).openStream()
                         myBitmap = BitmapFactory.decodeStream(input)
                         markerPosition = LatLng(
                             report.report.report_location_latitude,
                             report.report.report_location_longitude
                         )
-
+                        val markerIcon = myBitmap
                         val marker: Marker = gMap.addMarker(
                             MarkerOptions().position(markerPosition)
                                 .title(report.report.report_title)
                                 .snippet("Created by: " + report.user)
-                                .icon(BitmapDescriptorFactory.fromBitmap(myBitmap))
                         )
                         marker.setIcon(BitmapDescriptorFactory.defaultMarker(report.type.problem_color))
 
                         markers.add(marker)
                         markersHashType.put(marker, report.type.problem_description)
                         markersHashId.put(marker, report.report.id)
+                        markersHashImage.put(marker.id, markerIcon)
                     }
 
                 }

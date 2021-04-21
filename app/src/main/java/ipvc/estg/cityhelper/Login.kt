@@ -80,7 +80,7 @@ class Login : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
-                    Toast.makeText(this@Login, "${t.message}", Toast.LENGTH_LONG).show()
+                    login()
                 }
             })
         }
@@ -103,5 +103,6 @@ class Login : AppCompatActivity() {
     private fun handleLoginSuccessful(){
         val intent = Intent(this@Login, MainActivity::class.java)
         startActivity(intent)
+        this.finishAffinity()
     }
 }
