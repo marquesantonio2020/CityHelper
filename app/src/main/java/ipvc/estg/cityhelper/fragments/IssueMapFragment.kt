@@ -46,6 +46,7 @@ private var markers: ArrayList<Marker> = ArrayList()
 private lateinit var markersHashType: HashMap<Marker, String>
 private lateinit var markersHashId: HashMap<Marker, Int>
 private lateinit var markersHashImage: HashMap<String, Bitmap>
+private lateinit var selectedFilter: String
 
 //Variables for last known location
 private lateinit var lastLocation: Location
@@ -77,7 +78,7 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_issue_map, container, false)
-
+        selectedFilter = "None"
         //Obtaining the SupportMApFragment and get notified when the map is ready to be used
         val frag = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         frag.getMapAsync(this)
@@ -181,32 +182,43 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
 
     private fun showAllMarkers(markers: ArrayList<Marker>){
         for (marker in markers){
+            selectedFilter = "None"
             marker.isVisible = true
         }
     }
 
     private fun showInfrastucturesOnly(markers: ArrayList<Marker>){
         for(marker in markers){
+            selectedFilter = "Infraestruturas"
             marker.isVisible = markersHashType.get(marker) == "Infraestruturas"
         }
     }
     private fun showSanitationOnly(markers: ArrayList<Marker>){
         for(marker in markers){
+            selectedFilter = "Saneamento"
             marker.isVisible = markersHashType.get(marker) == "Saneamento"
         }
     }
 
     private fun showSignalingOnly(markers: ArrayList<Marker>){
         for(marker in markers){
+            selectedFilter = "Sinalização"
             marker.isVisible = markersHashType.get(marker) == "Sinalização"
         }
     }
 
     private fun calculateDistance(location: Location, markers: ArrayList<Marker>){
         for(marker in markers){
-            var results = FloatArray(1)
-            Location.distanceBetween(location.latitude, location.longitude, marker.position.latitude, marker.position.longitude, results)
-            marker.isVisible = results[0] < selectedDistance
+            if(markersHashType.get(marker) == selectedFilter){
+                var results = FloatArray(1)
+                Location.distanceBetween(location.latitude, location.longitude, marker.position.latitude, marker.position.longitude, results)
+                marker.isVisible = results[0] < selectedDistance
+            }
+            if(selectedFilter == "None"){
+                var results = FloatArray(1)
+                Location.distanceBetween(location.latitude, location.longitude, marker.position.latitude, marker.position.longitude, results)
+                marker.isVisible = results[0] < selectedDistance
+            }
         }
     }
     private fun getAllMarkers(){
