@@ -94,10 +94,6 @@ class Login : AppCompatActivity() {
             putInt(getString(R.string.userId), id)
             commit()
         }
-
-
-
-
     }
 
     private fun handleLoginSuccessful(){
