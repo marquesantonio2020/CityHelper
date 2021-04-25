@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import ipvc.estg.cityhelper.R
+import org.w3c.dom.Text
 
 class CustomInfoWindowForGoogleMap(context: Context, mapImageHash: HashMap<String, Bitmap>) : GoogleMap.InfoWindowAdapter {
 

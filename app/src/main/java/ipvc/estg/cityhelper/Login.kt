@@ -70,7 +70,7 @@ class Login : AppCompatActivity() {
             call.enqueue(object : Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     if(response.isSuccessful && response.body() != null){
-                        handleSharedPreferences(response.body()!!.id)
+                        handleSharedPreferences(response.body()!!.id, response.body()!!.username)
                         handleLoginSuccessful()
                     }else{
                         errorLogin = findViewById(R.id.login_error_message)
@@ -86,11 +86,12 @@ class Login : AppCompatActivity() {
         }
     }
 
-    private fun handleSharedPreferences(id: Int){
+    private fun handleSharedPreferences(id: Int, username: String){
         val sharedPref: SharedPreferences = getSharedPreferences(
             getString(R.string.logindata), Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putBoolean(getString(R.string.isLogged), true)
+            putString(getString(R.string.user), username)
             putInt(getString(R.string.userId), id)
             commit()
         }

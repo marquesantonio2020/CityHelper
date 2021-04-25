@@ -1,6 +1,8 @@
 package ipvc.estg.cityhelper
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import ipvc.estg.cityhelper.adapters.REPORT_ID
 import ipvc.estg.cityhelper.adapters.ReportListAdapter
@@ -36,6 +39,7 @@ private lateinit var reportType: TextView
 private lateinit var reportEdit: Button
 private lateinit var reportDelete: Button
 private lateinit var imgString: String
+private lateinit var username: String
 private var cityId: Int = 0
 private var typeId: Int = 0
 
@@ -53,39 +57,16 @@ class ReportDescriptionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_report_description)
 
         var selectedReport = intent.getIntExtra(REPORT_ID, 0)
+        val sharedPref: SharedPreferences = getSharedPreferences(getString(R.string.logindata), Context.MODE_PRIVATE)
+
+        username = sharedPref.getString(getString(R.string.user), "").toString()
 
         fetchSingleReport(selectedReport)
 
-        /**Delete Report from report description*/
-        reportDelete = findViewById(R.id.report_description_delete)
 
-        reportDelete.setOnClickListener{
-            deleteReport(selectedReport)
-            finish()
-
-        }
-        /****************************************/
-
-        /**Edit Report - takes user to CreateReportActivity*/
-        reportEdit = findViewById(R.id.report_description_edit)
-
-        reportEdit.setOnClickListener{
-            val intent = Intent(this, CreateReportActivity::class.java)
-
-            intent.putExtra(SELECTED_REPORT, selectedReport)
-            intent.putExtra(REPORT_TITLE, reportTitle.text)
-            intent.putExtra(REPORT_DESCRIPTION, reportDescription.text)
-            intent.putExtra(REPORT_STREET, reportLocation.text)
-            intent.putExtra(REPORT_LOCATION, cityId)
-            intent.putExtra(REPORT_TYPE, typeId)
-            intent.putExtra(REPORT_IMAGE, imgString)
-
-            startActivity(intent)
-        }
-        /***************************************************/
     }
 
-    private fun injectResponseData(reportData: ReportData){
+    private fun injectResponseData(reportData: ReportData, selectedReport: Int){
         reportImage = findViewById(R.id.report_image)
         reportUser = findViewById(R.id.report_user)
         reportTitle = findViewById(R.id.report_title)
@@ -93,6 +74,9 @@ class ReportDescriptionActivity : AppCompatActivity() {
         reportLocation = findViewById(R.id.report_location)
         reportCity = findViewById(R.id.report_city)
         reportType = findViewById(R.id.report_type_problem)
+
+        reportDelete = findViewById(R.id.report_description_delete)
+        reportEdit = findViewById(R.id.report_description_edit)
 
         if (Build.VERSION.SDK_INT > 9) {
             val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
@@ -115,6 +99,43 @@ class ReportDescriptionActivity : AppCompatActivity() {
        cityId = reportData.city.id
         typeId = reportData.type.id
 
+        if(reportData.user != username){
+            reportDelete.isVisible =  false
+            reportEdit.isVisible = false
+        }
+
+        /**Delete Report from report description*/
+
+
+        reportDelete.setOnClickListener{
+            deleteReport(selectedReport)
+            finish()
+
+
+        }
+
+
+        /****************************************/
+
+        /**Edit Report - takes user to CreateReportActivity*/
+
+
+        reportEdit.setOnClickListener{
+            val intent = Intent(this, CreateReportActivity::class.java)
+
+            intent.putExtra(SELECTED_REPORT, selectedReport)
+            intent.putExtra(REPORT_TITLE, reportData.report.report_title)
+            intent.putExtra(REPORT_DESCRIPTION, reportData.report.report_description)
+            intent.putExtra(REPORT_STREET, reportData.report.report_street)
+            intent.putExtra(REPORT_LOCATION, cityId)
+            intent.putExtra(REPORT_TYPE, typeId)
+            intent.putExtra(REPORT_IMAGE, imgString)
+
+            startActivity(intent)
+
+        }
+        /***************************************************/
+
     }
 
     private fun fetchSingleReport(selectedReport: Int){
@@ -125,7 +146,7 @@ class ReportDescriptionActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ReportData>, response: Response<ReportData>){
                 Toast.makeText(this@ReportDescriptionActivity, "${response}", Toast.LENGTH_SHORT).show()
                 if(response.isSuccessful){
-                    injectResponseData(response.body()!!)
+                    injectResponseData(response.body()!!, selectedReport)
                 }
             }
 

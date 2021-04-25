@@ -1,6 +1,8 @@
 package ipvc.estg.cityhelper.fragments
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -79,6 +81,7 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
     ): View? {
         val root = inflater.inflate(R.layout.fragment_issue_map, container, false)
         selectedFilter = "None"
+
         //Obtaining the SupportMApFragment and get notified when the map is ready to be used
         val frag = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         frag.getMapAsync(this)
@@ -256,7 +259,7 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
                         val marker: Marker = gMap.addMarker(
                             MarkerOptions().position(markerPosition)
                                 .title(report.report.report_title)
-                                .snippet("Created by: " + report.user)
+                                .snippet(report.report.report_street + "\n" + getString(R.string.createdby) + report.user + "\n" + report.type.problem_description)
                         )
                         marker.setIcon(BitmapDescriptorFactory.defaultMarker(report.type.problem_color))
 

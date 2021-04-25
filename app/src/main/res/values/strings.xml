@@ -66,6 +66,7 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="logindata" translatable="false">login_info</string>
     <string name="isLogged" translatable="false">isLogged</string>
     <string name="userId" translatable="false">userId</string>
+    <string name="user" translatable="false">user</string>
 
     <!--Map Related String-->
     <string name="title_activity_maps" translatable="false">Map</string>
@@ -91,6 +92,7 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="distance2000m">2Km</string>
     <string name="filter_text">Filters</string>
     <string name="distance_text">Distance</string>
+    <string name="createdby">Created by:</string>
 
 
 </resources>
