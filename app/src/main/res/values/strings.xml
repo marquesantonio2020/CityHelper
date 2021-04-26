@@ -94,5 +94,9 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="distance_text">Distance</string>
     <string name="createdby">Created by:</string>
 
+    <!--Information button text-->
+    <string name="too_bright">I see it\'s a very sunny day today! We recommend the use of sunglasses to avoid future sight problems</string>
+    <string name="not_too_bright">The sun is not too strong today.</string>
+
 
 </resources>

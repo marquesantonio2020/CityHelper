@@ -1,11 +1,16 @@
 package ipvc.estg.cityhelper.fragments
 
 import android.content.Context
+import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -15,10 +20,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -71,10 +75,20 @@ private lateinit var distance500m: Button
 private lateinit var distance1000m: Button
 private lateinit var distance2000m: Button
 
+//Information
+private lateinit var info_btn: ImageView
+private lateinit var popupWindow: PopupWindow
+private lateinit var info_txt: TextView
+
+//Sensor
+private lateinit var sensorManager: SensorManager
+private var brightness: Sensor? = null
+private var informationText: String = ""
+
 
 const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 var once: Boolean = false
-class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, GoogleMap.OnInfoWindowClickListener {
+class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, GoogleMap.OnInfoWindowClickListener, SensorEventListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,6 +96,7 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
         val root = inflater.inflate(R.layout.fragment_issue_map, container, false)
         selectedFilter = "None"
 
+        setUpSensor()
         //Obtaining the SupportMApFragment and get notified when the map is ready to be used
         val frag = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         frag.getMapAsync(this)
@@ -102,6 +117,24 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
                 }
                 calculateDistance(lastLocation, markers)
             }
+        }
+
+        info_btn = root.findViewById(R.id.info_btn)
+        info_btn.setOnClickListener {
+            popupWindow = PopupWindow(this.context!!)
+            if(!popupWindow.isShowing){
+                val view = layoutInflater.inflate(R.layout.information_popup, null)
+                popupWindow.contentView = view
+                info_txt = view.findViewById(R.id.info_text)
+                info_txt.text = informationText
+                info_txt.setOnClickListener {
+                    popupWindow.dismiss()
+                }
+                popupWindow.showAsDropDown(info_btn)
+            }else{
+               popupWindow.dismiss()
+            }
+
         }
 
         getAllMarkers()
@@ -292,11 +325,13 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
     override fun onPause() {
         super.onPause()
         fusedLocationClient.removeLocationUpdates(locationCallback)
+        sensorManager.unregisterListener(this)
     }
 
     override fun onResume() {
         super.onResume()
         startLocationUpdates()
+        sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onClick(v: View?) {
@@ -314,6 +349,36 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
     companion object {
         fun newInstance(): IssueMapFragment{
             return IssueMapFragment()
+        }
+    }
+
+
+    private fun setUpSensor(){
+        sensorManager = this.context!!.getSystemService(SENSOR_SERVICE) as SensorManager
+        brightness = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+    }
+
+   private fun brightness(brightness: Float){
+       if(::info_txt.isInitialized){
+           when(brightness.toInt()){
+               in 0..3000 -> {
+                   info_txt.text = getString(R.string.not_too_bright)}
+               else -> {
+                   info_txt.text = getString(R.string.too_bright)}
+           }
+       }
+
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        return
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if(event?.sensor?.type == Sensor.TYPE_LIGHT){
+            val light = event.values[0]
+            brightness(light)
+
         }
     }
 }

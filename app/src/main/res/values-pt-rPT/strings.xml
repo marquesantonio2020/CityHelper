@@ -79,5 +79,9 @@
     <string name="distance_text">Distância</string>
     <string name="createdby">"Criado por: "</string>
 
+    <!--Botão de informação-->
+    <string name="too_bright">Podemos ver que hoje é um dia muito ensolarado! Recomendamos que uso de óculos de sol para evitar problemas visuais.</string>
+    <string name="not_too_bright">O sol não está muito forte hoje.</string>
+
 
 </resources>
