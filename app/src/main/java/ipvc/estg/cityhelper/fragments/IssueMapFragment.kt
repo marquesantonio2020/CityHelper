@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -22,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
@@ -30,6 +32,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import ipvc.estg.cityhelper.R
 import ipvc.estg.cityhelper.ReportDescriptionActivity
 import ipvc.estg.cityhelper.adapters.REPORT_ID
@@ -38,13 +42,16 @@ import ipvc.estg.cityhelper.api.ReportData
 import ipvc.estg.cityhelper.api.endpoints.ReportEndPoint
 import ipvc.estg.cityhelper.api.servicebuilder.ServiceBuilder
 import ipvc.estg.cityhelper.map.CustomInfoWindowForGoogleMap
+import ipvc.estg.cityhelper.map.GeofenceHelper
 import kotlinx.android.synthetic.main.activity_user_report_list.*
 import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.InputStream
+import java.lang.Exception
 import java.net.URL
+import java.util.jar.Manifest
 
 private lateinit var gMap: GoogleMap
 private lateinit var allReports: List<ReportData>
@@ -85,15 +92,35 @@ private lateinit var sensorManager: SensorManager
 private var brightness: Sensor? = null
 private var informationText: String = ""
 
+//Geofencing
+private lateinit var geoFencingClient: GeofencingClient
+private lateinit var geoFenceHelper: GeofenceHelper
+private var isChecked: Boolean = false
+private var radius: Float = 0f
+
 
 const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+const val FINE_LOCATION_ACCESS_REQUEST_CODE = 10002
+const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
 var once: Boolean = false
-class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, GoogleMap.OnInfoWindowClickListener, SensorEventListener {
+class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, GoogleMap.OnInfoWindowClickListener, SensorEventListener, GoogleMap.OnMapLongClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_issue_map, container, false)
+        val sharedPref: SharedPreferences = this.activity!!.getSharedPreferences(getString(R.string.logindata), Context.MODE_PRIVATE)
+
+        isChecked = sharedPref.getBoolean(getString(R.string.isGeofenceActive), false)
+        radius = sharedPref.getFloat(getString(R.string.radius_meter), 0f)
+
+        /** Geofencing area ********************/
+        geoFencingClient = LocationServices.getGeofencingClient(this.activity!!)
+        geoFenceHelper = GeofenceHelper(this.context!!)
+        /************************************/
+
+
+
         selectedFilter = "None"
 
         setUpSensor()
@@ -178,6 +205,19 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
         markersHashImage = HashMap()
         gMap.setInfoWindowAdapter(CustomInfoWindowForGoogleMap(this.context!!, markersHashImage))
         gMap.setOnInfoWindowClickListener(this)
+        //Permissions for Geofencing
+        enableUserBackgroundLocation()
+        if(isChecked){
+            gMap.setOnMapLongClickListener (this)
+        }
+    }
+
+    private fun enableUserBackgroundLocation(){
+        if(ActivityCompat.checkSelfPermission(this.context!!, android.Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        ActivityCompat.requestPermissions(this.activity!!, arrayOf(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION), REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE)
+
+        return
+    }
     }
 
     override fun onInfoWindowClick(selectedMarker: Marker) {
@@ -380,5 +420,69 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
             brightness(light)
 
         }
+    }
+
+    override fun onMapLongClick(position: LatLng?) {
+        if(Build.VERSION.SDK_INT >= 29){
+            //Background Permission
+            if(ContextCompat.checkSelfPermission(this.context!!, android.Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                handleMapLong(position)
+            }else{
+                if(ActivityCompat.shouldShowRequestPermissionRationale(this.activity!!, android.Manifest.permission.ACCESS_BACKGROUND_LOCATION)){
+                    ActivityCompat.requestPermissions(this.activity!!, arrayOf(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION), FINE_LOCATION_ACCESS_REQUEST_CODE)
+                }else{
+                    ActivityCompat.requestPermissions(this.activity!!, arrayOf(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION), FINE_LOCATION_ACCESS_REQUEST_CODE)
+                }
+            }
+        }else
+        {
+            handleMapLong(position)
+        }
+    }
+
+    private fun handleMapLong(position: LatLng?){
+        addAreaGeofence(position!!, radius.toDouble())
+        addGeofence(position, radius)
+    }
+
+    private fun addGeofence(latlng: LatLng, radius: Float){
+        val geofence = geoFenceHelper.getGeofence("ID", latlng, radius, Geofence.GEOFENCE_TRANSITION_ENTER)
+        val geofencingRequest = geoFenceHelper.geofencingetGeofencingRequest(geofence)
+        val pendingIntent = geoFenceHelper.getPendingIntent()
+        if (ActivityCompat.checkSelfPermission(
+                this.context!!,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        geoFencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(object : OnSuccessListener<Void>{
+            override fun onSuccess(p0: Void?) {
+
+            }
+        })
+            .addOnFailureListener(object : OnFailureListener{
+                override fun onFailure(p0: Exception) {
+                    val errorMessage = geoFenceHelper.getError(p0)
+                }
+            })
+    }
+
+    private fun addAreaGeofence(center: LatLng, radius: Double){
+        var areaOption: CircleOptions = CircleOptions()
+        areaOption.center(center)
+        areaOption.radius(radius)
+        areaOption.strokeColor(Color.argb(255,255,0,0))
+        areaOption.fillColor(Color.argb(64,255,0,0))
+        areaOption.strokeWidth(4f)
+        gMap.addCircle(areaOption)
+
     }
 }

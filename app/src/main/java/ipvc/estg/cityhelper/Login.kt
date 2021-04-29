@@ -35,6 +35,7 @@ class Login : AppCompatActivity() {
 
         val loginValue = sharedPref.getBoolean(getString(R.string.isLogged), false)
 
+
         if(loginValue){
             val intent = Intent(this@Login, MainActivity::class.java)
             startActivity(intent)
@@ -92,6 +93,8 @@ class Login : AppCompatActivity() {
         with (sharedPref.edit()) {
             putBoolean(getString(R.string.isLogged), true)
             putString(getString(R.string.user), username)
+            putBoolean(getString(R.string.isGeofenceActive), false)
+            putFloat(getString(R.string.radius_meter), 100f)
             putInt(getString(R.string.userId), id)
             commit()
         }

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.UserAreaFragment">
+    tools:context=".fragments.UserAreaFragment"
+    android:padding="10dp">
 
 
     <Button
@@ -11,6 +12,47 @@
         android:id="@+id/logout_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"/>
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/logout"/>
+    <Switch
+        android:id="@+id/simpleSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logout_btn"
+        android:layout_alignParentEnd="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/simpleSwitch"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="@string/geofence"
+            android:paddingEnd="5dp"/>
+
+        <EditText
+            android:id="@+id/radius_meters"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_radius"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/unit"
+            android:paddingEnd="10dp"/>
+        <Button
+            style="@style/Button"
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:text="@string/confirm"/>
+
+    </LinearLayout>
+
+
 
 </RelativeLayout>

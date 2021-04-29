@@ -83,5 +83,23 @@
     <string name="too_bright">Podemos ver que hoje é um dia muito ensolarado! Recomendamos que uso de óculos de sol para evitar problemas visuais.</string>
     <string name="not_too_bright">O sol não está muito forte hoje.</string>
 
+    <!--String para Notificação-->
+    <string name="channel_name">Tenha cuidado!</string>
+    <string name="content_text">Acabou de entrar numa zona onde muitas denúncias foram realizadas</string>
+    <string name="notification_channel_description">Notificação de estado Cityhelper</string>
+    <string name="summary">sumário</string>
+
+    <!--String para o geofence-->
+    <string name="geofence_not_available">Não foi possivel selecionar uma área de aviso.</string>
+    <string name="geofence_too_many">Demasiadas áreas de aviso.</string>
+    <string name="geofence_pending">Demasiados pedidos para área de avisos.</string>
+
+    <!--String para área do utilizador-->
+    <string name="logout">Sair</string>
+    <string name="geofence">Raio da área de aviso:</string>
+    <string name="hint_radius">Raio</string>
+    <string name="unit">metros</string>
+    <string name="confirm">Confirmar</string>
+
 
 </resources>

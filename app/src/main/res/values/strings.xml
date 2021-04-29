@@ -67,6 +67,8 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="isLogged" translatable="false">isLogged</string>
     <string name="userId" translatable="false">userId</string>
     <string name="user" translatable="false">user</string>
+    <string name="isGeofenceActive" translatable="false">isChecked</string>
+    <string name="radius_meter" translatable="false">radius</string>
 
     <!--Map Related String-->
     <string name="title_activity_maps" translatable="false">Map</string>
@@ -97,6 +99,24 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <!--Information button text-->
     <string name="too_bright">I see it\'s a very sunny day today! We recommend the use of sunglasses to avoid future sight problems</string>
     <string name="not_too_bright">The sun is not too strong today.</string>
+
+    <!--Notification Strings-->
+    <string name="channel_name">Be careful!</string>
+    <string name="content_text">You just entered in an area where multiple reports have been created.</string>
+    <string name="notification_channel_description">Cityhelper status notification</string>
+    <string name="summary">summary</string>
+
+    <!--Strings for geofence-->
+    <string name="geofence_not_available">It wasn\'t possible to select a warning area.</string>
+    <string name="geofence_too_many">Too many warning areas.</string>
+    <string name="geofence_pending">Too many requests for warning area.</string>
+
+    <!--Strings for profile area-->
+    <string name="logout">Logout</string>
+    <string name="geofence">Warning area radius:</string>
+    <string name="hint_radius">Radius</string>
+    <string name="unit">meters</string>
+    <string name="confirm">Confirm</string>
 
 
 </resources>
