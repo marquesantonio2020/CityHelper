@@ -117,6 +117,7 @@ Odio eu feugiat pretium nibh. Ut sem nulla pharetra diam sit amet nisl suscipit.
     <string name="hint_radius">Radius</string>
     <string name="unit">meters</string>
     <string name="confirm">Confirm</string>
+    <string name="radius_changed">Radius changed successfully</string>
 
 
 </resources>

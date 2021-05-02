@@ -43,8 +43,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateNoteActivity" />
-        <activity android:name=".CreateReportActivity" />
+        <activity android:name=".CreateNoteActivity"
+            android:parentActivityName=".UserNoteListActivity"/>
+        <activity android:name=".CreateReportActivity"
+            android:parentActivityName=".UserReportListActivity"/>
         <activity
             android:name=".NoteDescriptionActivity"
             android:parentActivityName=".UserNoteListActivity" />

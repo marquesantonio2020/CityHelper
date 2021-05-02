@@ -8,10 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import ipvc.estg.cityhelper.Login
 import ipvc.estg.cityhelper.R
 
@@ -50,6 +47,7 @@ class UserAreaFragment : Fragment() {
                 putFloat(getString(R.string.radius_meter), radiusInput.text.toString().toFloat())
                 commit()
             }
+            Toast.makeText(this.context!!, getString(R.string.radius_changed), Toast.LENGTH_SHORT).show()
         }
 
         switch.setOnClickListener{

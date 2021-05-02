@@ -144,7 +144,6 @@ class ReportDescriptionActivity : AppCompatActivity() {
 
         call.enqueue(object : Callback<ReportData> {
             override fun onResponse(call: Call<ReportData>, response: Response<ReportData>){
-                Toast.makeText(this@ReportDescriptionActivity, "${response}", Toast.LENGTH_SHORT).show()
                 if(response.isSuccessful){
                     injectResponseData(response.body()!!, selectedReport)
                 }
