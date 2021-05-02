@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -91,6 +93,21 @@ private lateinit var info_txt: TextView
 private lateinit var sensorManager: SensorManager
 private var brightness: Sensor? = null
 private var informationText: String = ""
+private lateinit var compass: ImageView
+private lateinit var orientationView: TextView
+private var accelerometerSensor: Sensor? = null
+private var magnetometerSensor: Sensor? = null
+private var lastAccelerometer: FloatArray = FloatArray(3)
+private var lastMagnetometer: FloatArray = FloatArray(3)
+private var orientation: FloatArray = FloatArray(3)
+private var rotationMatrix: FloatArray = FloatArray(9)
+
+private var isLastAccelerometerArrayCopied = false
+private var isLastMagnetometerArrayCopied = false
+
+private var lastUpdatedTime: Long = 0
+private var currentDegree = 0f
+
 
 //Geofencing
 private lateinit var geoFencingClient: GeofencingClient
@@ -113,6 +130,9 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
 
         isChecked = sharedPref.getBoolean(getString(R.string.isGeofenceActive), false)
         radius = sharedPref.getFloat(getString(R.string.radius_meter), 0f)
+
+        compass = root.findViewById(R.id.compass)
+        orientationView = root.findViewById(R.id.orientation)
 
         /** Geofencing area ********************/
         geoFencingClient = LocationServices.getGeofencingClient(this.activity!!)
@@ -365,13 +385,17 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
     override fun onPause() {
         super.onPause()
         fusedLocationClient.removeLocationUpdates(locationCallback)
-        sensorManager.unregisterListener(this)
+        sensorManager.unregisterListener(this, brightness)
+        sensorManager.unregisterListener(this, accelerometerSensor)
+        sensorManager.unregisterListener(this, magnetometerSensor)
     }
 
     override fun onResume() {
         super.onResume()
         startLocationUpdates()
         sensorManager.registerListener(this, brightness, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onClick(v: View?) {
@@ -396,6 +420,8 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
     private fun setUpSensor(){
         sensorManager = this.context!!.getSystemService(SENSOR_SERVICE) as SensorManager
         brightness = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
     }
 
    private fun brightness(brightness: Float){
@@ -419,7 +445,32 @@ class IssueMapFragment : Fragment(), OnMapReadyCallback, View.OnClickListener, G
             val light = event.values[0]
             brightness(light)
 
+        }else if(event?.sensor?.type == Sensor.TYPE_ACCELEROMETER){
+            System.arraycopy(event.values, 0, lastAccelerometer, 0, event.values.size)
+            isLastAccelerometerArrayCopied = true
+        }else if(event?.sensor?.type == Sensor.TYPE_MAGNETIC_FIELD){
+            System.arraycopy(event.values, 0, lastMagnetometer, 0, event.values.size)
+            isLastMagnetometerArrayCopied = true
         }
+
+        if(isLastAccelerometerArrayCopied && isLastMagnetometerArrayCopied && (System.currentTimeMillis()- lastUpdatedTime > 250)){
+            SensorManager.getRotationMatrix(rotationMatrix, null, lastAccelerometer, lastMagnetometer)
+            SensorManager.getOrientation(rotationMatrix, orientation)
+
+            var azimuthInRadians = orientation[0].toDouble()
+            var azimuthInDegree = Math.toDegrees(azimuthInRadians).toFloat()
+
+            var rotateAnimation: RotateAnimation = RotateAnimation(currentDegree, -azimuthInDegree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f )
+
+            rotateAnimation.duration = 250
+            rotateAnimation.fillAfter = true
+            compass.startAnimation(rotateAnimation)
+            orientationView.text = azimuthInDegree.toInt().toString() + "°"
+            currentDegree = -azimuthInDegree
+            lastUpdatedTime = System.currentTimeMillis()
+
+        }
+
     }
 
     override fun onMapLongClick(position: LatLng?) {
